@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eb2bacf9d7fb98875196656b3ee1aa6f",
+    "content-hash": "f60e26d42a1a1b219551a5e4b748e856",
     "packages": [
         {
             "name": "astrotomic/laravel-translatable",
@@ -101,16 +101,16 @@
         },
         {
             "name": "bagisto/graphql-api",
-            "version": "dev-main",
+            "version": "v2.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bagisto/headless-ecommerce.git",
-                "reference": "70c31b9924706dd52d6f5b08f4904008b3ffd708"
+                "reference": "3c07f9eca116dca1c7baf5ab73ee21a75db32f57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bagisto/headless-ecommerce/zipball/70c31b9924706dd52d6f5b08f4904008b3ffd708",
-                "reference": "70c31b9924706dd52d6f5b08f4904008b3ffd708",
+                "url": "https://api.github.com/repos/bagisto/headless-ecommerce/zipball/3c07f9eca116dca1c7baf5ab73ee21a75db32f57",
+                "reference": "3c07f9eca116dca1c7baf5ab73ee21a75db32f57",
                 "shasum": ""
             },
             "require": {
@@ -118,7 +118,6 @@
                 "nuwave/lighthouse": "^6.23",
                 "php-open-source-saver/jwt-auth": "^2.1"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -146,9 +145,9 @@
             "description": "Bagisto GraphQL API",
             "support": {
                 "issues": "https://github.com/bagisto/headless-ecommerce/issues",
-                "source": "https://github.com/bagisto/headless-ecommerce/tree/main"
+                "source": "https://github.com/bagisto/headless-ecommerce/tree/v2.3.2"
             },
-            "time": "2025-10-01T11:05:50+00:00"
+            "time": "2025-08-08T10:19:41+00:00"
         },
         {
             "name": "bagisto/image-cache",
@@ -14948,7 +14947,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "bagisto/graphql-api": 20,
         "bagisto/image-cache": 20
     },
     "prefer-stable": true,
@@ -14964,6 +14962,6 @@
         "ext-pdo_mysql": "*",
         "ext-tokenizer": "*"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }
