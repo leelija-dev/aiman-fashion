@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f60e26d42a1a1b219551a5e4b748e856",
+    "content-hash": "34c23464009cd48d709d6ff92d24ab09",
     "packages": [
         {
             "name": "astrotomic/laravel-translatable",
@@ -205,6 +205,42 @@
                 "source": "https://github.com/bagisto/image-cache/tree/master"
             },
             "time": "2024-10-03T06:31:17+00:00"
+        },
+        {
+            "name": "bagisto/size-chart",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./packages/Webkul/SizeChart",
+                "reference": "cbb1be7df4a584698bc0ce09dc611ffd1597f8c7"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Webkul\\SizeChart\\Providers\\SizeChartServiceProvider"
+                    ],
+                    "aliases": []
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Webkul\\SizeChart\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dipak Majumdar",
+                    "email": "dipakmajumdar@zohomail.in"
+                }
+            ],
+            "description": "Size Chart for Bagisto E-commerce",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "barryvdh/laravel-dompdf",
@@ -14947,7 +14983,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "bagisto/image-cache": 20
+        "bagisto/image-cache": 20,
+        "bagisto/size-chart": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
@@ -14962,6 +14999,6 @@
         "ext-pdo_mysql": "*",
         "ext-tokenizer": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

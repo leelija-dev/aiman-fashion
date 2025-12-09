@@ -1,7 +1,7 @@
 {
-    "name": "bagisto/bagisto",
+    "name": "aiman-fashion/aiman-fashion",
     "type": "project",
-    "description": "Bagisto Laravel E-Commerce",
+    "description": "Aiman Fashion Laravel Based E-Commerce Project Using Bagisto",
     "keywords": [
         "framework",
         "laravel"
@@ -20,6 +20,7 @@
         "astrotomic/laravel-translatable": "^11.0.0",
         "bagisto/graphql-api": "^2.3",
         "bagisto/image-cache": "dev-master",
+        "bagisto/size-chart": "@dev",
         "barryvdh/laravel-dompdf": "^2.0.0",
         "diglactic/laravel-breadcrumbs": "^9.0",
         "elasticsearch/elasticsearch": "^8.10",
@@ -92,6 +93,7 @@
             "Webkul\\Shipping\\": "packages/Webkul/Shipping/src",
             "Webkul\\Shop\\": "packages/Webkul/Shop/src",
             "Webkul\\Sitemap\\": "packages/Webkul/Sitemap/src",
+            "Webkul\\SizeChart\\": "packages/Webkul/SizeChart/src",
             "Webkul\\SocialLogin\\": "packages/Webkul/SocialLogin/src",
             "Webkul\\SocialShare\\": "packages/Webkul/SocialShare/src",
             "Webkul\\Tax\\": "packages/Webkul/Tax/src",
@@ -127,13 +129,23 @@
             ]
         }
     },
-    "repositories": [{
-        "type": "path",
-        "url": "packages/*/*",
-        "options": {
-            "symlink": true
+    "repositories": {
+        "size-chart": {
+            "type": "path",
+            "url": "./packages/Webkul/SizeChart"
+        },
+        "sizechart": {
+            "type": "path",
+            "url": "./packages/Webkul/SizeChart"
+        },
+        "0": {
+            "type": "path",
+            "url": "packages/*/*",
+            "options": {
+                "symlink": true
+            }
         }
-    }],
+    },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
