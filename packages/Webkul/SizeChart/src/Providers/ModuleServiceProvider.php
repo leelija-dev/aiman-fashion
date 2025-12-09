@@ -24,5 +24,34 @@ class ModuleServiceProvider extends BaseModuleServiceProvider
             __DIR__ . '/../../publishable/assets' => public_path('vendor/webkul/size-chart/assets'),
             __DIR__ . '/../Resources/views/shop' => resource_path('themes/velocity/views/shop'),
         ]);
+
+        $this->app->register(EventServiceProvider::class);
+
+    }
+
+    /**
+     * Register services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->registerConfig();
+        // No need to register config here as it's handled by ModuleServiceProvider
+    }
+
+    protected function registerConfig()
+    {
+        $this->mergeConfigFrom(
+            dirname(__DIR__) . '/Config/admin-menu.php', 'menu.admin'
+        );
+
+        $this->mergeConfigFrom(
+            dirname(__DIR__) . '/Config/acl.php', 'acl'
+        );
+
+        $this->mergeConfigFrom(
+            dirname(__DIR__) . '/Config/system.php', 'core'
+        );
     }
 }
