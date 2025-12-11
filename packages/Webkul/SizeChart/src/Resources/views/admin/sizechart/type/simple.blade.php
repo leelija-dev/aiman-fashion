@@ -3,10 +3,10 @@
 @push('scripts')
 
 <script type="text/x-template" id="add-custom-options-template">
-    <div class="control-group" :class="[errors.has('config_option') ? 'has-error' : '']" v-if="! showCustomOptions">
+    <div class="control-group" :class="[(errors && errors.has && errors.has('config_option')) ? 'has-error' : '']" v-if="! showCustomOptions">
         <label for="config_option" class="required">{{ __('sizechart::app.sizechart.template.config-option') }}</label>
         <input type="text" v-model="customOptionValues" v-validate="{ required: true }" class="control" id="config_option" name="config_option" value="{{ request()->input('config_option') ?: old('config_option') }}" data-vv-as="&quot;{{ __('sizechart::app.sizechart.template.config-option') }}&quot;"/>
-        <span class="control-error" v-if="errors.has('config_option')">@{{ errors.first('config_option') }}</span>
+        <span class="control-error" v-if="errors && errors.has && errors.has('config_option')">@{{ errors.first('config_option') }}</span>
         <span class="control-info mt-10">{{ __('sizechart::app.sizechart.template.config-option-info') }}</span>
         <br>
         <button type="button" class="btn btn-lg btn-primary" @click="addCustomOption()">
@@ -47,56 +47,6 @@
         </div>
     </div>
 </script>
-
-<script>
-        Vue.component('add-custom-options', {
-
-            template: '#add-custom-options-template',
-
-            data: function() {
-                return {
-                    customOptionValues: '',
-                    showCustomOptions: false,
-                    inputOptions: '',
-                    counter: 0,
-                    addRows: []
-                }
-            },
-
-            methods: {
-                addCustomOption: function() {
-                    if (this.customOptionValues != '' || this.customOptionValue != null) {
-                        this.showCustomOptions = true;
-                        this.inputOptions = this.customOptionValues.split(",");    
-                    } else {
-                        window.flashMessages = [{
-                            'type': 'alert-error',
-                            'message': "{{ __('sizechart::app.sizechart.template.empty-custom-option') }}"
-                        }];
-
-                        this.$root.addFlashMessages()
-                    }
-                    
-                },
-
-                backtoinput: function() {
-                    this.showCustomOptions = false;
-                    this.counter = 0;
-                    this.addRows = [];
-                },
-
-                addCustomRow: function() {
-                    this.counter += 1;
-                    this.addRows.push({
-                        row: this.counter
-                    });
-                },
-
-                removeCustomRow: function(key) {
-                    this.addRows.splice(key, 1)
-                }
-            }
-        });
-</script>
+ 
     
 @endpush

@@ -51,6 +51,9 @@ import 'vue-cal/dist/vuecal.css';
 
 app.component('vue-cal', VueCal);
 
+// SizeChart component/plugin registration (ensures component available early)
+import SizeChart from './plugins/sizechart';
+
 [
     Admin,
     Axios,
@@ -59,6 +62,7 @@ app.component('vue-cal', VueCal);
     Flatpickr,
     VeeValidate,
     Draggable,
+    SizeChart,
 ].forEach((plugin) => app.use(plugin));
 
 /**

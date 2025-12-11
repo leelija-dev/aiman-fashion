@@ -3,27 +3,25 @@
 namespace Webkul\SizeChart\Datagrids;
 
 use Illuminate\Support\Facades\DB;
-use Webkul\Ui\DataGrid\DataGrid;
+use Webkul\DataGrid\DataGrid;
 
 class TemplateDataGrid extends DataGrid
 {
-    protected $index = 'id';
+    protected $primaryColumn = 'id';
 
     protected $sortOrder = 'desc';
 
     public function prepareQueryBuilder()
     {
-        $queryBuilder = DB::table('size_charts')->addSelect('id', 'template_name', 'template_code', 'template_type', 'image_path');
-
-        $this->setQueryBuilder($queryBuilder);
+        return DB::table('size_charts')->addSelect('id', 'template_name', 'template_code', 'template_type', 'image_path');
     }
 
-    public function addColumns()
+    public function prepareColumns()
     {
         $this->addColumn([
             'index'      => 'id',
             'label'      => trans('sizechart::app.sizechart.template.id'),
-            'type'       => 'number',
+            'type'       => 'integer',
             'searchable' => false,
             'sortable'   => true,
             'filterable' => true,
@@ -53,7 +51,7 @@ class TemplateDataGrid extends DataGrid
             'type'       => 'string',
             'searchable' => true,
             'filterable' => true,
-            'wrapper' => function($row) {
+            'closure' => function ($row) {
                 if ($row->template_type == 'configurable')
                     return trans('sizechart::app.sizechart.template.configurable-type');
                 else
@@ -64,30 +62,54 @@ class TemplateDataGrid extends DataGrid
 
     public function prepareActions()
     {
+        // $this->addAction([
+        //     'title' => trans('sizechart::app.edit'),
+        //     'type' => 'Edit',
+        //     'method' => 'GET',
+        //     'route' => 'sizechart.admin.index.edit',
+        //     'icon' => 'icon pencil-lg-icon'
+        // ]);
         $this->addAction([
             'title' => trans('sizechart::app.edit'),
-            'type' => 'Edit',
             'method' => 'GET',
-            'route' => 'sizechart.admin.index.edit',
-            'icon' => 'icon pencil-lg-icon'
+            'url' => function ($row) {
+                return route('sizechart.admin.index.edit', $row->id);
+            },
+            'icon' => 'icon pencil-lg-icon',
         ]);
 
+        // $this->addAction([
+        //     'title'        => trans('sizechart::app.delete'),
+        //     'method'       => 'POST',
+        //     'route'        => 'sizechart.admin.index.delete',
+        //     'confirm_text' => trans('ui::app.datagrid.massaction.delete'),
+        //     'icon'         => 'icon trash-icon',
+        // ]);
+
         $this->addAction([
-            'title'        => trans('sizechart::app.delete'),
-            'method'       => 'POST',
-            'route'        => 'sizechart.admin.index.delete',
+            'title' => trans('sizechart::app.delete'),
+            'method' => 'POST',
+            'url' => function ($row) {
+                return route('sizechart.admin.index.delete', $row->id);
+            },
             'confirm_text' => trans('ui::app.datagrid.massaction.delete'),
-            'icon'         => 'icon trash-icon',
+            'icon' => 'icon trash-icon',
         ]);
     }
 
     public function prepareMassActions()
     {
+        // $this->addMassAction([
+        //     'type' => 'delete',
+        //     'label' => trans('sizechart::app.sizechart.template.delete'),
+        //     'action' => route('sizechart.admin.index.massdelete'),
+        //     'method' => 'POST'
+        // ]);
+
         $this->addMassAction([
-            'type' => 'delete',
-            'label' => trans('sizechart::app.sizechart.template.delete'),
-            'action' => route('sizechart.admin.index.massdelete'),
-            'method' => 'POST'
+            'title' => trans('sizechart::app.sizechart.template.delete'),
+            'url' => route('sizechart.admin.index.massdelete'),
+            'method' => 'POST',
         ]);
     }
 }

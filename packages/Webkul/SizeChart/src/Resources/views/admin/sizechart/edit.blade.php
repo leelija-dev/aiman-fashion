@@ -1,10 +1,7 @@
-@extends('admin::layouts.content')
-
-@section('page_title')
-    {{ __('sizechart::app.sizechart.template.add-temp-title') }}
-@stop
-
-@section('css')
+<x-admin::layouts>
+    <x-slot:title>
+        {{ __('sizechart::app.sizechart.template.add-temp-title') }}
+        </x-slot>
     <style>
 
         .custom_input {
@@ -191,7 +188,7 @@
     </div>
 </script>
 
-<script>
+<!-- <script>
         Vue.component('add-custom-options', {
 
             template: '#add-custom-options-template',
@@ -277,6 +274,90 @@
                 }
             }
         });
+</script> -->
+
+<script type="module">
+    app.component('add-custom-options', {
+        template: '#add-custom-options-template',
+
+        data() {
+            return {
+                label: @json($label),
+                customOptionValues: @json($customOptions),
+                showCustomOptions: false,
+                inputOptions: '',
+                counter: @json($addRows).length,
+                configAttribute: '',
+                attribute: '',
+                addRows: @json($addRows),
+            }
+        },
+
+        mounted() {
+            if (@json($addRows).length) {
+                this.showCustomOptions = true;
+                this.addCustomOption();
+            }
+        },
+
+        methods: {
+            selectAttribute(event) {
+                this.configAttribute = event.target.value;
+
+                this.$http.get(`{{ url('/') }}/admin/sizechart/attribute?attribute-id=` + event.target.value)
+                    .then(response => {
+                        if (response.data.status) {
+                            this.customOptionValues = response.data.customOptionValues;
+                            this.addCustomOption();
+                        } else {
+                            window.flashMessages = [{
+                                'type': 'alert-error',
+                                'message': "{{ __('sizechart::app.sizechart.template.custom-option-not-available') }}"
+                            }];
+
+                            this.$root.addFlashMessages()
+                        }
+                    })
+                    .catch(() => {
+                        window.flashMessages = [{
+                            'type': 'alert-error',
+                            'message': "{{ __('error.something_went_wrong') }}"
+                        }];
+
+                        this.$root.addFlashMessages()
+                    })
+            },
+
+            addCustomOption() {
+                if (this.customOptionValues != '' || this.customOptionValue != null) {
+                    this.showCustomOptions = true;
+                    this.inputOptions = this.customOptionValues.split(",");
+                } else {
+                    window.flashMessages = [{
+                        'type': 'alert-error',
+                        'message': "{{ __('sizechart::app.sizechart.template.empty-custom-option') }}"
+                    }];
+
+                    this.$root.addFlashMessages()
+                }
+            },
+
+            backtoinput() {
+                this.showCustomOptions = false;
+                this.counter = 0;
+                this.addRows = [];
+            },
+
+            addCustomRow() {
+                this.counter += 1;
+                this.addRows.push({ row: this.counter });
+            },
+
+            removeCustomRow(key) {
+                this.addRows.splice(key, 1);
+            },
+        },
+    });
 </script>
     
 @endpush

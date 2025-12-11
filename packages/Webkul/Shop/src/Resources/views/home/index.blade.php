@@ -18,11 +18,17 @@
         name="keywords"
         content="{{ $channel->home_seo['meta_keywords'] ?? '' }}"
     />
-@endPush
+@endpush
 
-@push('scripts')
+<!-- @push('scripts')
     <script>
         localStorage.setItem('categories', JSON.stringify(@json($categories)));
+    </script>
+@endpush -->
+
+@push('scripts')
+    <script type="module">
+        localStorage.setItem('categories', JSON.stringify(@json(isset($categories) ? $categories : [])));
     </script>
 @endpush
 

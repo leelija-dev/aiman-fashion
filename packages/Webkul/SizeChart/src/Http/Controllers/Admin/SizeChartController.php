@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Webkul\SizeChart\Repositories\SizeChartRepository;
 use Webkul\SizeChart\Repositories\AssignTemplateRepository;
 use Webkul\Attribute\Repositories\AttributeRepository;
+use Webkul\SizeChart\Datagrids\TemplateDataGrid;
 
 class SizeChartController extends Controller
 {
@@ -76,6 +77,10 @@ class SizeChartController extends Controller
      */
     public function index()
     {
+        if (request()->ajax()) {
+            return datagrid(TemplateDataGrid::class)->process();
+        }
+
         return view($this->_config['view']);
     }
 
