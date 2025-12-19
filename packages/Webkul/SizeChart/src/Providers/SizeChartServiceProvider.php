@@ -5,6 +5,8 @@ namespace Webkul\SizeChart\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
+use Webkul\SizeChart\Datagrids\TemplateDataGrid;
+
 
 class SizeChartServiceProvider extends ServiceProvider
 {
@@ -29,5 +31,6 @@ class SizeChartServiceProvider extends ServiceProvider
     public function register()
     {
         // No need to register config here as it's handled by ModuleServiceProvider
+        $this->app->singleton(TemplateDataGrid::class);
     }
 }

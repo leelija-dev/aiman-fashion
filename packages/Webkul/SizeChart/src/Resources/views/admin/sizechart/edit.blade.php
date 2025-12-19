@@ -1,41 +1,59 @@
 <x-admin::layouts>
     <x-slot:title>
-        {{ __('sizechart::app.sizechart.template.add-temp-title') }}
-        </x-slot>
-    <style>
+        {{ __('sizechart::app.sizechart.template.edit-temp-title') }}
+    </x-slot>
 
-        .custom_input {
-            height:28px;
-            text-align: center;
-            font-weight: bold;
-        }
-        .custom_input_t {
-            height:28px;
-            text-align: center;
-        }
-        .customOption {
-            display: flex;
-        }
-        .customSpan{
-            margin:2px;
-        }
-        .customOptionDiv {
-            padding-top: 20px;
-            padding-bottom: 20px;
-            overflow: scroll;
-        }
-    </style>
-@stop
+    @push('css')
+        <style>
+            [v-cloak] {
+                display: none;
+            }
+            .custom_input {
+                height: 28px;
+                text-align: center;
+                font-weight: bold;
+            }
+            .custom_input_t {
+                height: 28px;
+                text-align: center;
+            }
+            .customOption {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 12px;
+            }
+            .customSpan {
+                min-width: 120px;
+                margin: 2px;
+            }
+            .customOptionDiv {
+                padding: 20px;
+                overflow-x: auto;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                background-color: #f9fafb;
+            }
+            .icon.remove-icon {
+                cursor: pointer;
+                font-size: 20px;
+                color: #ef4444;
+            }
+        </style>
+    @endpush
 
-@section('content')
-    <div class="content">
-        <form method="POST" action="" @submit.prevent="onSubmit" enctype="multipart/form-data">
+    <div class="content" id="app" v-cloak>
+        <form method="POST" 
+              action="{{ route('sizechart.admin.index.update', $sizeChart->id) }}" 
+              enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+
             <div class="page-header">
                 <div class="page-title">
                     <h1>
-                        <i class="icon angle-left-icon back-link" onclick="history.length > 1 ? history.go(-1) : window.location = '{{ route('admin.dashboard.index') }}';"></i>
-
-                        {{ __('sizechart::app.sizechart.template.add-temp-title') }}
+                        <i class="icon angle-left-icon back-link" onclick="window.history.back()"></i>
+                        {{ __('sizechart::app.sizechart.template.edit-temp-title') }}
                     </h1>
                 </div>
 
@@ -47,317 +65,163 @@
             </div>
 
             <div class="page-content">
-                @csrf()
-                @if($sizeChart->template_type == 'simple')
-                <input type="hidden" name="template_type" value="simple"/>
-                @else
-                <input type="hidden" name="template_type" value="configurable"/>
-                @endif
-                
-                <input type="hidden" name="template_id" value="{{ $sizeChart->id }}"/>
+                <input type="hidden" name="template_type" 
+                       value="{{ $sizeChart->template_type == 'simple' ? 'simple' : 'configurable' }}" />
+                <input type="hidden" name="template_id" value="{{ $sizeChart->id }}" />
 
-                {!! view_render_event('bagisto.admin.sizechart.template.create_simple_template.before') !!}
+                <x-admin::accordion>
+                    <x-slot:header>
+                        {{ __('sizechart::app.sizechart.template.edit-template') }}
+                    </x-slot:header>
 
-                <accordian :title="'{{ __('sizechart::app.sizechart.template.add-simple-temp') }}'" :active="true">
-                    <div slot="body">
+                    <x-slot:content>
+                        <!-- Template Name -->
+                        <x-admin::form.control-group>
+                            <x-admin::form.control-group.label class="required">
+                                {{ __('sizechart::app.sizechart.template.template-name') }}
+                            </x-admin::form.control-group.label>
 
-                        <div class="control-group" :class="[errors.has('template_name') ? 'has-error' : '']">
-                            <label for="template_name" class="required">{{ __('sizechart::app.sizechart.template.template-name') }}</label>
-                            <input type="text" v-validate="{ required: true }" class="control" id="template_name" name="template_name" value="{{ $sizeChart->template_name ?: old('template_name') }}" data-vv-as="&quot;{{ __('sizechart::app.sizechart.template.template-name') }}&quot;"/>
-                            <span class="control-error" v-if="errors.has('template_name')">@{{ errors.first('template_name') }}</span>
+                            <x-admin::form.control-group.control
+                                type="text"
+                                name="template_name"
+                                value="{{ old('template_name', $sizeChart->template_name) }}"
+                                rules="required" />
+                            <x-admin::form.control-group.error control-name="template_name" />
+                        </x-admin::form.control-group>
+
+                        <!-- Template Code -->
+                        <x-admin::form.control-group>
+                            <x-admin::form.control-group.label class="required">
+                                {{ __('sizechart::app.sizechart.template.template-code') }}
+                            </x-admin::form.control-group.label>
+
+                            <x-admin::form.control-group.control
+                                type="text"
+                                name="template_code"
+                                value="{{ $sizeChart->template_code }}"
+                                :disabled="true" />
+                        </x-admin::form.control-group>
+
+                        <!-- Custom Options Component -->
+                        <div id="custom-options-container">
+                            <add-custom-options></add-custom-options>
                         </div>
 
-                        <div class="control-group" :class="[errors.has('template_code') ? 'has-error' : '']">
-                            <label for="template_code" class="required">{{ __('sizechart::app.sizechart.template.template-code') }}</label>
-                            <input type="text" v-validate="{ required: true }" class="control" id="template_code" name="template_code" value="{{ $sizeChart->template_code ?: old('template_code') }}" data-vv-as="&quot;{{ __('sizechart::app.sizechart.template.template-code') }}&quot;" disabled/>
-                            <span class="control-error" v-if="errors.has('template_code')">@{{ errors.first('template_code') }}</span>
-                        </div>
-                        
-                        <add-custom-options></add-custom-options>
+                        <!-- Image Upload -->
+                        <x-admin::form.control-group>
+                            <x-admin::form.control-group.label>
+                                {{ __('sizechart::app.sizechart.template.template-image') }}
+                            </x-admin::form.control-group.label>
 
-                        <div class="control-group image" :class="[errors.has('images') ? 'has-error' : '']">
-                            <label for="images" >{{ __('sizechart::app.sizechart.template.template-image') }}</label>
-                            @if($sizeChart->image_path)
-                                <image-wrapper
-                                    :multiple="false"
-                                    input-name="images"
-                                    :images='"{{ url()->to('/') . '/storage/' . $sizeChart->image_path }}"'
-                                    :button-label="'{{ __('admin::app.catalog.products.add-image-btn-title') }}'">
-                                </image-wrapper>
-                            @else
-                                <image-wrapper
-                                    :multiple="false"
-                                    input-name="images"
-                                    :button-label="'{{ __('admin::app.catalog.products.add-image-btn-title') }}'">
-                                </image-wrapper>
-                            @endif
-                        </div>
-
-                    </div>
-                </accordian>
-
-                {!! view_render_event('bagisto.admin.sizechart.template.create_simple_template.after') !!}
-
+                            <x-admin::media.images
+                                name="images"
+                                :allow-multiple="false"
+                                :uploaded-images="$sizeChart->image_path ? [['url' => Storage::url($sizeChart->image_path)]] : []"
+                            />
+                        </x-admin::form.control-group>
+                    </x-slot:content>
+                </x-admin::accordion>
             </div>
-
         </form>
     </div>
-@stop
+</x-admin::layouts>
 
 @push('scripts')
-
-<script type="text/x-template" id="add-custom-options-template">
-    @if ($sizeChart->template_type == 'simple')    
-    <div class="control-group" :class="[errors.has('config_option') ? 'has-error' : '']" v-if="! showCustomOptions">
-        <label for="config_option" class="required">{{ __('sizechart::app.sizechart.template.config-option') }}</label>
-        <input type="text" v-model="customOptionValues" v-validate="{ required: true }" class="control" id="config_option" name="config_option" value="{{ request()->input('config_option') ?: old('config_option') }}" data-vv-as="&quot;{{ __('sizechart::app.sizechart.template.config-option') }}&quot;"/>
-        <span class="control-error" v-if="errors.has('config_option')">@{{ errors.first('config_option') }}</span>
-        <span class="control-info mt-10">{{ __('sizechart::app.sizechart.template.config-option-info') }}</span>
-        <br>
-        <button type="button" class="btn btn-lg btn-primary" @click="addCustomOption()">
-            {{ __('sizechart::app.sizechart.template.continue') }}
-        </button>
-    </div>
-    @else
-    <div class="control-group" :class="[errors.has('config_option') ? 'has-error' : '']" v-if="! showCustomOptions">
-        <label for="config_option" class="required">{{ __('sizechart::app.sizechart.template.config-option') }}</label>
-        <select v-validate="'required'" v-model="attribute" class="control"  id="select_attribute" @change="selectAttribute($event)" name="select_attribute" data-vv-as="&quot;{{ __('sizechart::app.sizechart.template.select-attribute') }}&quot;">
-            <option value="">{{ __('sizechart::app.sizechart.template.select-attribute') }}</option>
-            
-            @foreach ($attributes as $attribute)
-                @if ($attribute->name != 'Price')
-                    <option value="{{ $attribute->id }}">
-                        {{ $attribute->name ? $attribute->name : $attribute->admin_name }}
-                    </option>
-                @endif
-            @endforeach
-            
-        </select>
-        <span class="control-error" v-if="errors.has('config_option')">@{{ errors.first('config_option') }}</span>
-    </div>
-    <input type="hidden" v-model="configAttribute" name="config_attribute" value="0"/>
-    @endif
-
-    <div class="control-group" v-else>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vee-validate@2.2.15/dist/vee-validate.min.js"></script>
+    
+    <script type="text/x-template" id="add-custom-options-template">
         <div>
-            <button type="button" class="btn btn-lg btn-primary" @click="backtoinput()">
-                {{ __('sizechart::app.sizechart.template.back') }}
-            </button>
-            <button type="button" class="btn btn-lg btn-primary" @click="addCustomRow()">
-                {{ __('sizechart::app.sizechart.template.add-row') }}
-            </button>
-        </div>
-        <div class="customOptionDiv">
-            <div class="customOption">
-                <span class="customSpan">
-                    <input type="text" class="custom_input" v-model="label"  v-validate="{ required: true }"  name="formname[0][label]" placeholder="Enter Option Name"/>
-                </span>
-                <span v-for='(inputOption, index) in inputOptions' class="customSpan">
-                    <input type="text" class="custom_input"  :value="inputOption" :name="'formname[0]['+ inputOption +']'" readonly/>
-                </span>
-            </div>
-        
-            <div class="customOption" v-for='(addRow, key) in addRows'>
-                <div v-if="addRow.name" style="display:flex;">
-                    <span class="customSpan">
-                        <input type="text" class="custom_input_t" v-validate="{ required: true }" :value="addRow.name"  :name="'formname['+ addRow.row +'][name]'"/>
+            <div v-if="!showCustomOptions">
+                <div class="control-group" :class="{'has-error': errors.has('config_option')}">
+                    <label class="required">Configuration Options</label>
+                    <input type="text" 
+                           v-model="customOptionValues" 
+                           class="control" 
+                           placeholder="Enter options separated by commas"
+                           v-validate="'required'"
+                           name="config_option">
+                    <span class="control-error" v-if="errors.has('config_option')">
+                        @{{ errors.first('config_option') }}
                     </span>
-                    <span v-for='(inputOption, index) in inputOptions' class="customSpan">
-                        <input type="text" class="custom_input_t" v-validate="{ required: true }"  :value="addRow[``+ inputOption +``]" :name="'formname['+ addRow.row +']['+ inputOption +']'"/>
-                    </span>
-                    <span>
-                        <i class="icon remove-icon" @click="removeCustomRow(key)"></i>
-                    </span>
+                    <button type="button" class="btn btn-primary" @click="addCustomOption">
+                        Continue
+                    </button>
                 </div>
-
-                <div v-else style="display:flex;">
-                    <span class="customSpan">
-                        <input type="text" class="custom_input_t" v-validate="{ required: true }"  :name="'formname['+ addRow.row +'][name]'"/>
-                    </span>
-                    <span v-for='(inputOption, index) in inputOptions' class="customSpan">
-                        <input type="text" class="custom_input_t" v-validate="{ required: true }"   :name="'formname['+ addRow.row +']['+ inputOption +']'"/>
-                    </span>
-                    <span>
-                        <i class="icon remove-icon" @click="removeCustomRow(key)"></i>
-                    </span>
-                </div>
-                
             </div>
-
+            <div v-else>
+                <div class="customOptionDiv">
+                    <div v-for="(row, key) in addRows" :key="key" class="customOption">
+                        <span class="customSpan">
+                            <input type="text" 
+                                   class="custom_input_t" 
+                                   v-validate="'required'"
+                                   :name="'formname['+ row.row +'][name]'"/>
+                        </span>
+                        <span v-for="(inputOption, index) in inputOptions" class="customSpan">
+                            <input type="text" 
+                                   class="custom_input_t" 
+                                   v-validate="'required'"
+                                   :name="'formname['+ row.row +']['+ inputOption +']'"/>
+                        </span>
+                        <span>
+                            <i class="icon remove-icon" @click="removeCustomRow(key)"></i>
+                        </span>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" @click="addCustomRow">
+                    Add Row
+                </button>
+            </div>
         </div>
-    </div>
-</script>
+    </script>
 
-<!-- <script>
+    <script>
         Vue.component('add-custom-options', {
-
             template: '#add-custom-options-template',
-
             data: function() {
                 return {
-                    label: @json($label),
-                    customOptionValues: @json($customOptions),
+                    label: @json($label ?? ''),
+                    customOptionValues: @json($customOptions ?? ''),
                     showCustomOptions: false,
-                    inputOptions: '',
-                    counter: @json($addRows).length,
+                    inputOptions: [],
+                    counter: @json(count($addRows ?? [])),
                     configAttribute: '',
                     attribute: '',
-                    addRows: @json($addRows),
+                    addRows: @json($addRows ?? [])
                 }
             },
-
-            mounted: function() {
-                if ( @json($addRows).length) {
-                    showCustomOptions = true;
-                    this.addCustomOption();
+            created() {
+                if (this.customOptionValues) {
+                    this.inputOptions = this.customOptionValues.split(',');
+                    this.showCustomOptions = true;
                 }
             },
-
             methods: {
-                selectAttribute: function(event) {
-                    this.configAttribute = event.target.value;
-
-                    this.$http.get(`{{url('/')}}/admin/sizechart/attribute?attribute-id=` + event.target.value)
-                        .then(response => {
-                            if (response.data.status){
-                                this.customOptionValues = response.data.customOptionValues;
-                                this.addCustomOption();
-                            }else{
-                                window.flashMessages = [{
-                                    'type': 'alert-error',
-                                    'message': "{{ __('sizechart::app.sizechart.template.custom-option-not-available') }}"
-                                }];
-
-                                this.$root.addFlashMessages()
-                            }
-                        })
-                        .catch(error => {
-                            window.flashMessages = [{
-                                'type': 'alert-error',
-                                'message': "{{ __('error.something_went_wrong') }}"
-                            }];
-
-                            this.$root.addFlashMessages()
-                        })
-                },
-                
-                addCustomOption: function() {
-                    if (this.customOptionValues != '' || this.customOptionValue != null) {
+                addCustomOption() {
+                    if (this.customOptionValues) {
+                        this.inputOptions = this.customOptionValues.split(',').map(item => item.trim());
                         this.showCustomOptions = true;
-                        this.inputOptions = this.customOptionValues.split(",");    
-                    } else {
-                        window.flashMessages = [{
-                            'type': 'alert-error',
-                            'message': "{{ __('sizechart::app.sizechart.template.empty-custom-option') }}"
-                        }];
-
-                        this.$root.addFlashMessages()
                     }
-                    
                 },
-
-                backtoinput: function() {
+                backtoinput() {
                     this.showCustomOptions = false;
-                    this.counter = 0;
-                    this.addRows = [];
                 },
-
-                addCustomRow: function() {
-                    this.counter += 1;
-                    this.addRows.push({
-                        row :this.counter
-                    });
+                addCustomRow() {
+                    this.counter++;
+                    this.addRows.push({row: this.counter});
                 },
-
-                removeCustomRow: function(key) {
-                    this.addRows.splice(key, 1)
+                removeCustomRow(index) {
+                    this.addRows.splice(index, 1);
                 }
             }
         });
-</script> -->
 
-<script type="module">
-    app.component('add-custom-options', {
-        template: '#add-custom-options-template',
-
-        data() {
-            return {
-                label: @json($label),
-                customOptionValues: @json($customOptions),
-                showCustomOptions: false,
-                inputOptions: '',
-                counter: @json($addRows).length,
-                configAttribute: '',
-                attribute: '',
-                addRows: @json($addRows),
-            }
-        },
-
-        mounted() {
-            if (@json($addRows).length) {
-                this.showCustomOptions = true;
-                this.addCustomOption();
-            }
-        },
-
-        methods: {
-            selectAttribute(event) {
-                this.configAttribute = event.target.value;
-
-                this.$http.get(`{{ url('/') }}/admin/sizechart/attribute?attribute-id=` + event.target.value)
-                    .then(response => {
-                        if (response.data.status) {
-                            this.customOptionValues = response.data.customOptionValues;
-                            this.addCustomOption();
-                        } else {
-                            window.flashMessages = [{
-                                'type': 'alert-error',
-                                'message': "{{ __('sizechart::app.sizechart.template.custom-option-not-available') }}"
-                            }];
-
-                            this.$root.addFlashMessages()
-                        }
-                    })
-                    .catch(() => {
-                        window.flashMessages = [{
-                            'type': 'alert-error',
-                            'message': "{{ __('error.something_went_wrong') }}"
-                        }];
-
-                        this.$root.addFlashMessages()
-                    })
-            },
-
-            addCustomOption() {
-                if (this.customOptionValues != '' || this.customOptionValue != null) {
-                    this.showCustomOptions = true;
-                    this.inputOptions = this.customOptionValues.split(",");
-                } else {
-                    window.flashMessages = [{
-                        'type': 'alert-error',
-                        'message': "{{ __('sizechart::app.sizechart.template.empty-custom-option') }}"
-                    }];
-
-                    this.$root.addFlashMessages()
-                }
-            },
-
-            backtoinput() {
-                this.showCustomOptions = false;
-                this.counter = 0;
-                this.addRows = [];
-            },
-
-            addCustomRow() {
-                this.counter += 1;
-                this.addRows.push({ row: this.counter });
-            },
-
-            removeCustomRow(key) {
-                this.addRows.splice(key, 1);
-            },
-        },
-    });
-</script>
-    
+        // Initialize Vue
+        document.addEventListener('DOMContentLoaded', function() {
+            new Vue({
+                el: '#app'
+            });
+        });
+    </script>
 @endpush
