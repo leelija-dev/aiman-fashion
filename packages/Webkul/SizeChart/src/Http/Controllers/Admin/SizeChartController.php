@@ -12,6 +12,7 @@ use Webkul\SizeChart\Repositories\AssignTemplateRepository;
 use Webkul\Attribute\Repositories\AttributeRepository;
 use Webkul\SizeChart\Datagrids\TemplateDataGrid;
 
+
 class SizeChartController extends Controller
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -377,28 +378,28 @@ class SizeChartController extends Controller
     //     ]);
     // }
 
-public function edit($id)
-{
-    $sizeChart = \DB::table('size_charts')->find($id);
+    public function edit($id)
+    {
+        $sizeChart = \DB::table('size_charts')->find($id);
 
-    if (!$sizeChart) {
-        abort(404);
+        if (!$sizeChart) {
+            abort(404);
+        }
+
+        $attributes = $this->attributeRepository->findWhere(['is_filterable' => 1]);
+
+        // Safely decode JSON fields
+        $options = json_decode($sizeChart->options ?? '[]', true) ?: [];
+        $rows = json_decode($sizeChart->rows ?? '[]', true) ?: [];
+
+        return view('sizechart::admin.sizechart.edit', [
+            'sizeChart' => $sizeChart,
+            'attributes' => $attributes,
+            'label' => $sizeChart->label ?? '',
+            'customOptions' => is_array($options) ? $options : [],
+            'addRows' => is_array($rows) ? $rows : [],
+        ]);
     }
-
-    $attributes = $this->attributeRepository->findWhere(['is_filterable' => 1]);
-
-    // Safely decode JSON fields
-    $options = json_decode($sizeChart->options ?? '[]', true) ?: [];
-    $rows = json_decode($sizeChart->rows ?? '[]', true) ?: [];
-
-    return view('sizechart::admin.sizechart.edit', [
-        'sizeChart' => $sizeChart,
-        'attributes' => $attributes,
-        'label' => $sizeChart->label ?? '',
-        'customOptions' => is_array($options) ? $options : [],
-        'addRows' => is_array($rows) ? $rows : [],
-    ]);
-}
     /**
      * Update the specified resource in storage.
      *

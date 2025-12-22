@@ -4,6 +4,7 @@ return [
     [
         'key'    => 'catalog.products.size-chart',
         'name'   => 'sizechart::app.admin.system.size-chart',
+        'info' => 'sizechart::app.admin.system.sizechart-info',
         'sort'   => 1,
         'fields' => [
             [

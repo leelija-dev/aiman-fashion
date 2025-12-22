@@ -8,6 +8,11 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Webkul\SizeChart\Repositories\SizeChartRepository;
 use Webkul\SizeChart\Repositories\AssignTemplateRepository;
 use Webkul\Attribute\Repositories\AttributeRepository;
+use Webkul\Product\Models\ProductAttributeValue;
+use Webkul\Attribute\Models\Attribute;
+use Webkul\Attribute\Models\AttributeOption;
+use Webkul\SizeChart\Models\SizeChart;
+
 
 class SizeChartController extends Controller
 {
@@ -54,8 +59,7 @@ class SizeChartController extends Controller
         SizeChartRepository $sizechartRepository,
         AssignTemplateRepository $assignTemplateRepository,
         AttributeRepository $attributeRepository
-    )
-    {
+    ) {
         $this->_config = request('_config');
 
         $this->sizechartRepository = $sizechartRepository;
@@ -70,18 +74,17 @@ class SizeChartController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function getSizeChart($productId)
-    {
-        
-        $assignTemplate = $this->assignTemplateRepository->findOneWhere(['product_id' => $productId]);
-       
-        if ($assignTemplate) {
-            return $this->sizechartRepository->findOrFail($assignTemplate->template_id);
-        } else {
-            return false;
-        }
-        
-    }
+    // public function getSizeChart($productId)
+    // {
+
+    //     $assignTemplate = $this->assignTemplateRepository->findOneWhere(['product_id' => $productId]);
+
+    //     if ($assignTemplate) {
+    //         return $this->sizechartRepository->findOrFail($assignTemplate->template_id);
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
     /**
      * Display a listing of the resource.
@@ -95,7 +98,7 @@ class SizeChartController extends Controller
         $sizeChart = $this->sizechartRepository->findOrFail($id);
 
         $data = json_decode($sizeChart->size_chart);
-    
+
         foreach ($data[0] as $key => $value) {
             if ($key == 'label') {
                 $label = $value;
@@ -136,9 +139,38 @@ class SizeChartController extends Controller
                 $this->assignTemplateRepository->create($data);
             }
         }
-        
+
         return  $response = [
-                    'status'   => true,
-                ];
+            'status'   => true,
+        ];
+    }
+
+    public function getSizeChart($productId)
+    {
+
+       
+        $attribute = Attribute::where('code', 'size_chart_id')->first();
+
+         
+        if (! $attribute) {
+            return false;
+        }
+
+        $value = ProductAttributeValue::where('product_id', $productId)
+            ->where('attribute_id', $attribute->id)
+            ->value('integer_value');
+
+          
+        if (! $value) {
+            return false;
+        }
+
+        $option = AttributeOption::find($value);
+
+        if (! $option || ! $option->swatch_value) {
+            return false;
+        }
+
+        return SizeChart::where('template_code', $option->swatch_value)->first();
     }
 }
