@@ -405,50 +405,50 @@ class SizeChartController extends Controller
     //     ]);
     // }
 
-//     public function edit($id)
-//     {
-//         $sizeChart = $this->sizechartRepository->findOrFail($id);
+    //     public function edit($id)
+    //     {
+    //         $sizeChart = $this->sizechartRepository->findOrFail($id);
 
-//         $data = json_decode($sizeChart->size_chart, true) ?? [];
-// ;
-//         if (!empty($data)) {
-//             $headers = array_shift($data); // first row
-//             $matrix  = array_values($data); // remaining rows
-//         } else {
-//             $headers = [];
-//             $matrix  = [];
-//         }
+    //         $data = json_decode($sizeChart->size_chart, true) ?? [];
+    // ;
+    //         if (!empty($data)) {
+    //             $headers = array_shift($data); // first row
+    //             $matrix  = array_values($data); // remaining rows
+    //         } else {
+    //             $headers = [];
+    //             $matrix  = [];
+    //         }
 
-//         return view('sizechart::admin.sizechart.edit', [
-//             'sizeChart' => $sizeChart,
-//             'headers'   => $headers,
-//             'matrix'    => $matrix,
-//         ]);
-//     }
+    //         return view('sizechart::admin.sizechart.edit', [
+    //             'sizeChart' => $sizeChart,
+    //             'headers'   => $headers,
+    //             'matrix'    => $matrix,
+    //         ]);
+    //     }
 
-public function edit($id)
-{
-    $sizeChart = $this->sizechartRepository->findOrFail($id);
-    $data = json_decode($sizeChart->size_chart, true) ?? [];
-    
-    if (!empty($data)) {
-        // The first row should be headers
-        $firstRow = reset($data);
-        $headers = array_keys($firstRow);
-        
-        // The entire data is our matrix
-        $matrix = $data;
-    } else {
-        $headers = [];
-        $matrix = [];
+    public function edit($id)
+    {
+        $sizeChart = $this->sizechartRepository->findOrFail($id);
+        $data = json_decode($sizeChart->size_chart, true) ?? [];
+
+        if (!empty($data)) {
+            // The first row should be headers
+            $firstRow = reset($data);
+            $headers = array_keys($firstRow);
+
+            // The entire data is our matrix
+            $matrix = $data;
+        } else {
+            $headers = [];
+            $matrix = [];
+        }
+
+        return view('sizechart::admin.sizechart.edit', [
+            'sizeChart' => $sizeChart,
+            'headers'   => $headers,
+            'matrix'    => $matrix,
+        ]);
     }
-
-    return view('sizechart::admin.sizechart.edit', [
-        'sizeChart' => $sizeChart,
-        'headers'   => $headers,
-        'matrix'    => $matrix,
-    ]);
-}
 
     /**
      * Update the specified resource in storage.
@@ -460,12 +460,12 @@ public function edit($id)
     {
         // Get the ID from the route parameter
         $id = $id ?? request('template_id');
-        
+
         if (empty($id)) {
             session()->flash('error', 'Invalid size chart ID');
             return redirect()->back();
         }
-        
+
         $imagePath = '';
         $formData = request('formname');
         $templateName = request('template_name');
@@ -503,7 +503,7 @@ public function edit($id)
             // Debug: Log the ID and check if it's valid
             \Log::info('Updating size chart with ID: ' . $id);
             \Log::info('All size chart IDs: ' . json_encode(\DB::table('size_charts')->pluck('id')->toArray()));
-            
+
             // Try to find the record first
             $sizeChart = $this->sizechartRepository->find($id);
             \Log::info('Found size chart: ' . json_encode($sizeChart));
@@ -534,23 +534,42 @@ public function edit($id)
      *
      * @return \Illuminate\Http\Response
      */
+    // public function destroy($id)
+    // {
+    //     $sizeChart = $this->sizechartRepository->findOrFail($id);
+
+    //     try {
+    //         $this->sizechartRepository->delete($id);
+
+    //         session()->flash('success', trans('admin::app.response.delete-success', ['name' => 'Template']));
+
+    //         return response()->json(['message' => true], 200);
+    //     } catch (Exception $e) {
+    //         report($e);
+
+    //         session()->flash('error', trans('admin::app.response.delete-failed', ['name' => 'Template']));
+    //     }
+
+    //     return response()->json(['message' => false], 400);
+    // }
+
     public function destroy($id)
     {
-        $sizeChart = $this->sizechartRepository->findOrFail($id);
-
         try {
             $this->sizechartRepository->delete($id);
-
-            session()->flash('success', trans('admin::app.response.delete-success', ['name' => 'Template']));
-
-            return response()->json(['message' => true], 200);
-        } catch (Exception $e) {
-            report($e);
-
-            session()->flash('error', trans('admin::app.response.delete-failed', ['name' => 'Template']));
+            session()->flash('success', trans('admin::app.response.delete-success', ['name' => 'size Chart']));
+            return redirect()->route('sizechart.admin.index');
+            // return response()->json([
+            //     'status' => true,
+            //     'redirect' => route('sizechart.admin.index'),
+            //     'message' => trans('admin::app.response.delete-success', ['name' => 'Size Chart'])
+            // ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => trans('admin::app.response.delete-failed', ['name' => 'Size Chart'])
+            ], 500);
         }
-
-        return response()->json(['message' => false], 400);
     }
 
     /**

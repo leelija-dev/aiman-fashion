@@ -49,6 +49,8 @@ Route::group(['middleware' => ['web', 'admin', 'locale']], function () {
         'view' => 'sizechart::admin.sizechart.edit',
     ])->name('sizechart.admin.index.update');
 
+    Route::delete('/admin/sizechart/delete/{id}', 'Webkul\SizeChart\Http\Controllers\Admin\SizeChartController@destroy')->name('sizechart.admin.index.delete');
+
     Route::post('/admin/sizechart/create', 'Webkul\SizeChart\Http\Controllers\Admin\SizeChartController@store')->defaults('_config', [
         'view' => 'sizechart::admin.sizechart.index',
     ])->name('sizechart.admin.index.store');
