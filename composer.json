@@ -8,6 +8,7 @@
     ],
     "license": "MIT",
     "require": {
+        "webkul/custom": "@dev",
         "php": "^8.2",
         "ext-calendar": "*",
         "ext-curl": "*",
@@ -130,6 +131,17 @@
         }
     },
     "repositories": {
+        "webkul-custom": {
+            "type": "path",
+            "url": "./packages/Webkul/Custom"
+        },
+        "custom": {
+            "type": "path",
+            "url": "./packages/Webkul/Custom",
+            "options": {
+                "symlink": true
+            }
+        },
         "size-chart": {
             "type": "path",
             "url": "./packages/Webkul/SizeChart"

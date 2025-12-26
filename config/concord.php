@@ -43,6 +43,7 @@ return [
         \Webkul\Theme\Providers\ModuleServiceProvider::class,
         \Webkul\User\Providers\ModuleServiceProvider::class,
         \Webkul\SizeChart\Providers\ModuleServiceProvider::class,
+        \Webkul\Custom\Providers\ModuleServiceProvider::class,
     ],
 
 ];
