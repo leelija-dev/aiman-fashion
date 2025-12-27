@@ -7,24 +7,22 @@ use Illuminate\Support\ServiceProvider;
 class CustomServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap services.
-     *
-     * @return void
+     * Register services.
      */
-    public function boot()
+    public function register(): void
     {
-        $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'custom');
-        
+        // Register module provider
+        $this->app->register(ModuleServiceProvider::class);
+
+        // Register view related provider
         $this->app->register(CheckoutViewServiceProvider::class);
     }
 
     /**
-     * Register services.
-     *
-     * @return void
+     * Bootstrap services.
      */
-    public function register()
+    public function boot(): void
     {
-        //
+        $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'custom');
     }
 }
