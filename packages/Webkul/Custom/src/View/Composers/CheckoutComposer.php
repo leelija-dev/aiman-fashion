@@ -10,5 +10,8 @@ class CheckoutComposer
     {
         // Set flag to hide shipping method
         $view->with('hideShippingMethod', true);
+        
+        // Also set a global view variable that can be checked in the template
+        view()->share('shouldHideShipping', true);
     }
 }

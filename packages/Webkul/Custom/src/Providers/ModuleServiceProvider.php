@@ -27,5 +27,6 @@ class ModuleServiceProvider extends CoreModuleServiceProvider
         parent::register();
 
         $this->app->register(CheckoutViewServiceProvider::class);
+        $this->app->register(CheckoutServiceProvider::class);
     }
 }

@@ -1,13 +1,17 @@
-<!-- @if (isset($hideShippingMethod) && $hideShippingMethod)
+@if (isset($shouldHideShipping) && $shouldHideShipping === true)
     @php
-        // Remove shipping method section
+        // Get the original content
         $content = view('shop::checkout.onepage.index')->render();
-        $content = preg_replace('/<x-shop::checkout\.onepage\.shipping-method\s*\/>/', '', $content);
+        
+        // Remove the shipping method section
+        $content = preg_replace('/<x-shop::checkout\.onepage\.shipping-method\s*\/>/s', '', $content);
+        
+        // Output the modified content
         echo $content;
     @endphp
 @else
     @include('shop::checkout.onepage.index')
-@endif -->
+@endif
 <!-- SEO Meta Content -->
 @push('meta')
     <meta name="description" content="@lang('shop::app.checkout.onepage.index.checkout')"/>
