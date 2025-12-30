@@ -1,44 +1,20 @@
+
+
 @php
-    $sizeChart = app('Webkul\SizeChart\Http\Controllers\Shop\SizeChartController');
-    
-    if($product->parent_id) {
-        $sproductId = $product->parent_id;
-    } else {
-        $sproductId = $product->id;
-    }
-    $template = $sizeChart->getSizeChart($sproductId);
+    $sizeChartController = app(
+        \Webkul\SizeChart\Http\Controllers\Shop\SizeChartController::class
+    );
+
+    $productId = $product->id;
+    $template  = $sizeChartController->getSizeChart($productId);
 @endphp
 
-@if (core()->getConfigData('catalog.products.size-chart.enable-sizechart'))
-    @if($template)
+@if (core()->getConfigData('catalog.products.size-chart.enable-sizechart') && $template)
 
-        <view-size-chart></view-size-chart>
+    <a href="javascript:void(0)"
+       class="text-sm text-blue-600 cursor-pointer"
+       onclick="window.app.showModal('downloadDataGrid')">
+        {{ __('sizechart::app.sizechart.template.view-size-chart') }}
+    </a>
 
-        @push('scripts')
-
-        <script type="text/x-template" id="view-size-chart-template" >
-        <a href="#" @click="showSizeChart" style="float:right; font-size:18px;">{{ __('sizechart::app.sizechart.template.view-size-chart') }}</a>
-        </script>
-
-        <script>
-                Vue.component('view-size-chart', {
-
-                    template: '#view-size-chart-template',
-
-                    data: function() {
-                        return {
-                        }
-                    },
-
-                    methods: {
-                        showSizeChart: function () {
-                            this.$root.showModal('downloadDataGrid');
-                        },
-                    }
-                });
-        </script>
-            
-        @endpush
-
-    @endif
 @endif

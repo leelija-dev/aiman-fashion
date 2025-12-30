@@ -1,5 +1,36 @@
 <?php
 
+Route::get('/admin/sizechart/test', function() {
+    try {
+        // Check database connection
+        \DB::connection()->getPdo();
+        
+        // Check if table exists
+        if (!\Schema::hasTable('size_charts')) {
+            return 'size_charts table does not exist';
+        }
+        
+        // Get record count
+        $count = \DB::table('size_charts')->count();
+        
+        // Get first few records
+        $records = \DB::table('size_charts')->take(5)->get();
+        
+        return [
+            'status' => 'connected',
+            'table_exists' => true,
+            'record_count' => $count,
+            'sample_records' => $records
+        ];
+    } catch (\Exception $e) {
+        return [
+            'status' => 'error',
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ];
+    }
+})->name('sizechart.test');
+
 Route::group(['middleware' => ['web', 'admin', 'locale']], function () {
 
     Route::get('/admin/sizechart', 'Webkul\SizeChart\Http\Controllers\Admin\SizeChartController@index')->defaults('_config', [
@@ -14,9 +45,11 @@ Route::group(['middleware' => ['web', 'admin', 'locale']], function () {
         'view' => 'sizechart::admin.sizechart.edit',
     ])->name('sizechart.admin.index.edit');
 
-    Route::post('/admin/sizechart/edit/{id}', 'Webkul\SizeChart\Http\Controllers\Admin\SizeChartController@update')->defaults('_config', [
+    Route::put('/admin/sizechart/edit/{id}', 'Webkul\SizeChart\Http\Controllers\Admin\SizeChartController@update')->defaults('_config', [
         'view' => 'sizechart::admin.sizechart.edit',
     ])->name('sizechart.admin.index.update');
+
+    Route::delete('/admin/sizechart/delete/{id}', 'Webkul\SizeChart\Http\Controllers\Admin\SizeChartController@destroy')->name('sizechart.admin.index.delete');
 
     Route::post('/admin/sizechart/create', 'Webkul\SizeChart\Http\Controllers\Admin\SizeChartController@store')->defaults('_config', [
         'view' => 'sizechart::admin.sizechart.index',
