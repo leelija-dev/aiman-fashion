@@ -114,14 +114,6 @@
 
                         <!-- Payment Step -->
                         <template v-if="currentStep === 'payment'">
-                            <!-- Debug info -->
-                            <!-- <div class="mb-4 p-4 bg-yellow-100 rounded-lg">
-                                <p class="text-sm">Debug: Cart has payment methods: <span v-text="cart && cart.payment_methods ? 'Yes' : 'No'"></span></p>
-                                <p class="text-sm">Debug: Current step: <span v-text="currentStep"></span></p>
-                                <p class="text-sm">Debug: Cart payment methods count: <span v-text="cart && cart.payment_methods ? cart.payment_methods.length : 0"></span></p>
-                                <p class="text-sm">Debug: Local payment methods count: <span v-text="paymentMethods ? paymentMethods.length : 0"></span></p>
-                            </div> -->
-                            
                             <!-- Payment Methods Component -->
                             <div class="mb-7 max-md:last:!mb-0">
                                 <template v-if="! paymentMethods">
@@ -133,7 +125,7 @@
                                     <div class="flex flex-wrap gap-7 max-md:gap-4 max-sm:gap-2.5">
                                         <div 
                                             class="relative cursor-pointer max-md:max-w-full max-md:flex-auto"
-                                            v-for="(payment, index) in paymentMethods"
+                                            v-for="(payment, index) in filteredPaymentMethods"
                                         >
                                             <input 
                                                 type="radio" 
@@ -194,23 +186,15 @@
 
                         <!-- Place Order Button -->
                         <div class="flex justify-end" v-if="canPlaceOrder">
-                            <template v-if="cart.payment_method == 'paypal_smart_button'">
-                                {!! view_render_event('bagisto.shop.checkout.onepage.summary.paypal_smart_button.before') !!}
-                                <!-- Paypal Smart Button Vue Component -->
-                                <v-paypal-smart-button></v-paypal-smart-button>
-                                {!! view_render_event('bagisto.shop.checkout.onepage.summary.paypal_smart_button.after') !!}
-                            </template>
-                            <template v-else>
-                                <button
-                                    type="button"
-                                    class="primary-button w-max rounded-2xl bg-navyBlue px-11 py-3 max-md:mb-4 max-md:w-full max-md:max-w-full max-md:rounded-lg max-sm:py-1.5 text-white"
-                                    v-bind:disabled="isPlacingOrder"
-                                    v-on:click="placeOrder"
-                                >
-                                    <span v-if="isPlacingOrder">Placing Order...</span>
-                                    <span v-else>Place Order</span>
-                                </button>
-                            </template>
+                            <button
+                                type="button"
+                                class="primary-button w-max rounded-2xl bg-navyBlue px-11 py-3 max-md:mb-4 max-md:w-full max-md:max-w-full max-md:rounded-lg max-sm:py-1.5 text-white"
+                                v-bind:disabled="isPlacingOrder"
+                                v-on:click="placeOrder"
+                            >
+                                <span v-if="isPlacingOrder">Placing Order...</span>
+                                <span v-else>Place Order</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -237,6 +221,16 @@
                         selectedShippingMethod: null,
                         selectedPaymentMethod: null,
                         isLoading: true
+                    }
+                },
+
+                computed: {
+                    filteredPaymentMethods() {
+                        if (!this.paymentMethods) return [];
+                        // Filter out all PayPal payment methods
+                        return this.paymentMethods.filter(payment => {
+                            return !payment.method.includes('paypal');
+                        });
                     }
                 },
 
