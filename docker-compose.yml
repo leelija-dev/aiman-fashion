@@ -14,10 +14,9 @@ services:
     networks:
       - aiman-fashion-network
     depends_on:
-      - mariadb
       - redis
     environment:
-      DB_HOST: ${DB_HOST:-mariadb}
+      DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
       DB_DATABASE: ${DB_DATABASE}
       DB_USERNAME: ${DB_USERNAME}
@@ -39,29 +38,6 @@ services:
       - aiman-fashion-network
     depends_on:
       - app
-
-  mariadb:
-    image: mariadb:10.4.32
-    container_name: aiman-fashion-mariadb
-    restart: unless-stopped
-    ports:
-      - "${DB_PORT}"
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-    volumes:
-      - mariadb_data:/var/lib/mysql
-      - ./docker/mariadb/my.cnf:/etc/mysql/conf.d/my.cnf
-    networks:
-      - aiman-fashion-network
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
 
   redis:
     image: redis:alpine
@@ -137,8 +113,6 @@ networks:
     driver: bridge
 
 volumes:
-  mariadb_data:
-    driver: local
   redis_data:
     driver: local
   elasticsearch_data:

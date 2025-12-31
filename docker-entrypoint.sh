@@ -2,13 +2,16 @@
 
 set -e
 
-echo "Waiting for MariaDB to be ready..."
-until nc -z mariadb 3306 2>/dev/null; do
-    echo "MariaDB is unavailable - sleeping"
+DB_HOST=${DB_HOST:-mariadb}
+DB_PORT=${DB_PORT:-3306}
+
+echo "Waiting for database at ${DB_HOST}:${DB_PORT} to be ready..."
+until nc -z "$DB_HOST" "$DB_PORT" 2>/dev/null; do
+    echo "${DB_HOST} is unavailable - sleeping"
     sleep 2
 done
 
-echo "MariaDB is up - executing commands"
+echo "Database ${DB_HOST}:${DB_PORT} is up - executing commands"
 
 # Set proper permissions
 echo "Setting permissions..."
