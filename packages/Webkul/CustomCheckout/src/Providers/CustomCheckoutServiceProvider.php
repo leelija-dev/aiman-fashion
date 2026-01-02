@@ -14,16 +14,19 @@ class CustomCheckoutServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Register view namespace
+        // Register view namespace for checkout
         $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'checkout');
         
-        // Also register the namespace for direct includes
-        View::addNamespace('checkout', __DIR__ . '/../Resources/views');
+        // Register shop namespace for overriding shop views with higher priority
+        $this->loadViewsFrom(__DIR__ . '/../Resources/views', 'shop');
         
-        // Publish views if needed
-        $this->publishes([
-            __DIR__ . '/../Resources/views' => resource_path('views/vendor/checkout'),
-        ], 'checkout-views');
+        // Override specific views by extending the view factory
+        $this->app->booted(function () {
+            $view = $this->app['view'];
+            $view->composer('shop::customers.account.addresses.create', function ($view) {
+                $view->setPath(__DIR__ . '/../Resources/views/shop/customers/account/addresses/create.blade.php');
+            });
+        });
     }
 
     /**
