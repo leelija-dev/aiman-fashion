@@ -4,6 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: aiman-fashion-app
+    user: "${UID:-1000}:${GID:-1000}"  # Use environment variables with fallback to 1000:1000
     restart: unless-stopped
     working_dir: /var/www/html
     volumes:
@@ -23,6 +24,7 @@ services:
       REDIS_PORT: ${REDIS_PORT:-6379}
 
   nginx:
+    user: "${UID:-1000}:${GID:-1000}"  # Add this line for nginx as well
     image: nginx:alpine
     container_name: aiman-fashion-nginx
     restart: unless-stopped
