@@ -51,10 +51,6 @@ pipeline {
                                     chmod -R 755 storage bootstrap/cache
                                     chmod -R 775 storage/framework
                                     
-                                    # Install dependencies
-                                    echo "[DEPLOY] Installing dependencies..."
-                                    docker run --rm -v ${PROJECT_DIR}:/app -w /app composer:2.5 install --no-dev --optimize-autoloader
-                                    
                                     # Build and start containers
                                     echo "[DEPLOY] Building and starting containers..."
                                     ENV=prod docker compose -f docker-compose.yml down
