@@ -1,0 +1,84 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Web\HomeController;
+
+
+// use App\Http\Controllers\Web\PageController;
+// use App\Http\Controllers\Web\ContactController;
+// use App\Http\Controllers\Web\AboutController;
+// use App\Http\Controllers\Web\BlogController;
+// use App\Http\Controllers\Web\CareerController;
+// use App\Http\Controllers\Web\ServiceController;
+// use App\Http\Controllers\Web\ApplicationController;
+
+// use App\Http\Controllers\Web\DigitalM☻arketing;
+// use App\Http\Controllers\Web\BestSeo;
+// use App\Http\Controllers\Web\Ecommerce;
+
+
+// Route::get('/l1', function () {
+//     return view('web.L1');
+// });
+// Route::get('/l2', function () {
+//     return view('web.L2');
+// });
+// Route::get('/l3', function () {
+//     return view('web.L3');
+// });
+
+
+Route::get('/', [HomeController::class, 'home'])->name('page.index');
+Route::fallback(function () { abort(404); });
+
+// Route::get('/career', [CareerController::class, 'index'])->name('page.career');
+// Route::get('/contact-us', [ContactController::class, 'index'])->name('page.contact');
+// Route::post('/insert-contact', [ContactController::class, 'store'])->name('page.insert-contact');  //add
+// Route::get('/about', [AboutController::class, 'index'])->name('page.about');
+// Route::post('/email', [ContactController::class, 'Email'])->name('page.email');
+// Route::post('/apply', [ApplicationController::class, 'Apply'])->name('page.apply');
+// Route::get('successfull', [ApplicationController::class, 'Thanks'])->name('page.successfull');
+
+
+// Route::prefix('blog')->group(function () {
+//     Route::get('/', [BlogController::class, 'index'])->name('blog.home');
+//     Route::get('/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
+//     Route::get('/tag/{slug}', [BlogController::class, 'tag'])->name('blog.tag');
+//     Route::get('/search', [BlogController::class, 'search'])->name('blog.search');
+//     // Keep this last to prevent conflicts
+//     Route::get('/{slug}', [BlogController::class, 'show'])->name('blog.single-post');
+// });
+
+
+// Route::get('/privacy-policy', function () {
+//     return view('web.privacy');
+// })->name('page.privacy');
+// Route::get('/term-and-conditions', function () {
+//     return view('web.terms');
+// })->name('page.terms');
+// Route::get('/thank-you', function () {
+//     return view('web.thank-you');
+// })->name('page.thank-you');
+// Route::get('/coming-soon', function () {
+//     return view('web.coming-soon');
+// })->name('page.coming-soon');
+
+
+// Route::prefix('page')->group(function () {
+    // Route::get('/web-development', fn() => redirect()->route('page.coming-soon'))->name('page.web-development');
+    // Route::get('/web-design', fn() => redirect()->route('page.coming-soon'))->name('page.web-design');
+    // Route::get('/guest-post-services', fn() => redirect()->route('page.coming-soon'))->name('page.guest-post-services');
+    // Route::get('/content-marketing', fn() => redirect()->route('page.coming-soon'))->name('page.content-marketing');
+    // Route::get('/seo-services', fn() => redirect()->route('page.coming-soon'))->name('page.seo-services');
+    // Route::get('/branding-services', fn() => redirect()->route('page.coming-soon'))->name('page.branding-services');
+    // Route::get('/web-design', fn() => redirect()->route('page.coming-soon'))->name('page.web-design');
+// });
+
+// Route::get('/{slug}', [PageController::class, 'sub_pages'])->name('Page.view');
+// Route::post('/{slug}', [PageController::class, 'sub_pages'])->name('Page.view');
+
+// Route::get('/{slug}', [ServiceController::class, 'showService'])->name('Service.view');
+
+// Route::get('/digital-marketing', [DigitalMarketing::class, 'index'])->name('page.digital-marketing');
+// Route::get('/best-seo', [BestSeo::class, 'index'])->name('Page.best-seo');
+// Route::get('/best-ecommerce', [Ecommerce::class, 'index'])->name('Page.best-ecommerce');
