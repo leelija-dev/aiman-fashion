@@ -10,7 +10,7 @@ $roles = $user->getRoleNames();
 
 $admin = Admin::find($userId);
 
-$productAndUnit = request()->routeIs('admin.categories.*', 'admin.products.*', 'admin.unit.*', 'admin.brands.*') ? true : false;
+$productAndUnit = request()->routeIs('admin.categories.*', 'admin.products.*', 'admin.unit.*', 'admin.brands.*', 'admin.colors.*', 'admin.sizes.*') ? true : false;
 $isNewsletterActive = false;
 $isEmailActive = false;
 @endphp
@@ -294,6 +294,14 @@ $isEmailActive = false;
                         <li class="submenu-item">
                             <a class="submenu-link {{ request()->routeIs('admin.brands.*') ? 'active' : '' }} "
                                 href="{{ route('admin.brands.index') }}">Brands</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a class="submenu-link {{ request()->routeIs('admin.colors.*') ? 'active' : '' }} "
+                                href="{{ route('admin.colors') }}">Colors</a>
+                        </li>
+                        <li class="submenu-item">
+                            <a class="submenu-link {{ request()->routeIs('admin.sizes.*') ? 'active' : '' }} "
+                                href="{{ route('admin.sizes') }}">Sizes</a>
                         </li>
                     </ul>
                 </div>

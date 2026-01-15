@@ -20,7 +20,9 @@ use App\Http\Controllers\Admin\NewsLetterController;
 // use App\Http\Controllers\Admin\ProductPackageController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
-use App\Http\Controllers\Admin\TagController as AdminTagController;
+use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\OccasionController as AdminOccasionController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\StockController;
@@ -105,6 +107,30 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
         Route::delete('occasions/{occasion}/force-delete', [AdminOccasionController::class, 'forceDelete'])
             ->name('admin.occasions.force-delete');
+
+        // Colors
+        Route::resource('colors', ColorController::class, [
+            'names' => [
+                'index' => 'admin.colors',
+                'create' => 'admin.colors.create',
+                'store' => 'admin.colors.store',
+                'edit' => 'admin.colors.edit',
+                'update' => 'admin.colors.update',
+                'destroy' => 'admin.colors.delete'
+            ]
+        ])->except(['show']);
+
+        // Sizes
+        Route::resource('sizes', SizeController::class, [
+            'names' => [
+                'index' => 'admin.sizes',
+                'create' => 'admin.sizes.create',
+                'store' => 'admin.sizes.store',
+                'edit' => 'admin.sizes.edit',
+                'update' => 'admin.sizes.update',
+                'destroy' => 'admin.sizes.delete'
+            ]
+        ])->except(['show']);
 
         // Products
         Route::resource('products', AdminProductController::class, [
