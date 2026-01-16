@@ -44,7 +44,7 @@ class ColorController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:50|unique:colors,name',
-            'code' => 'required|string|max:7|unique:colors,code|regex:/^#[0-9A-Fa-f]{6}$/',
+            'code' => 'required',
             'color_tone' => 'nullable|string|max:50',
         ]);
 

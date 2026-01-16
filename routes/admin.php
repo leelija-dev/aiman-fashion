@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\OccasionController as AdminOccasionController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
@@ -129,6 +130,18 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
                 'edit' => 'admin.sizes.edit',
                 'update' => 'admin.sizes.update',
                 'destroy' => 'admin.sizes.delete'
+            ]
+        ])->except(['show']);
+
+        // Product Variants
+        Route::resource('product-variants', ProductVariantController::class, [
+            'names' => [
+                'index' => 'admin.product-variants',
+                'create' => 'admin.product-variants.create',
+                'store' => 'admin.product-variants.store',
+                'edit' => 'admin.product-variants.edit',
+                'update' => 'admin.product-variants.update',
+                'destroy' => 'admin.product-variants.destroy'
             ]
         ])->except(['show']);
 
