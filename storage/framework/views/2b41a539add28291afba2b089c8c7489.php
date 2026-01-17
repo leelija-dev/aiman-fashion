@@ -145,21 +145,29 @@
                                     </div>
                                 </td>
                                 <td class="align-middle text-center">
-                                    <a href="#" class="text-secondary font-weight-bold text-xs me-4"
-                                       data-bs-toggle="modal" data-bs-target="#editModal<?php echo e($variant->id); ?>"
-                                       title="Edit variant">
-                                        <i class="fa-solid fa-pen-to-square"></i>
-                                    </a>
-                                    <form id="delete-form-<?php echo e($variant->id); ?>"
-                                          action="<?php echo e(route('admin.product-variants.destroy', $variant->id)); ?>"
-                                          method="POST" style="display:none;">
-                                        <?php echo csrf_field(); ?>
-                                        <?php echo method_field('DELETE'); ?>
-                                    </form>
-                                    <a href="javascript:void(0);"
-                                       onclick="confirmDelete(<?php echo e($variant->id); ?>)">
-                                        <i class="fa-solid fa-trash text-danger font-weight-bold text-xs"></i>
-                                    </a>
+                                    <div class="d-flex gap-1 justify-content-center">
+                                        <a href="#" class="text-secondary font-weight-bold text-xs me-4"
+                                           data-bs-toggle="modal" data-bs-target="#editModal<?php echo e($variant->id); ?>"
+                                           title="Edit variant">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                        <a href="javascript:void(0);" 
+                                           onclick="openStockModal(<?php echo e($variant->id); ?>, '<?php echo e($variant->sku); ?>', <?php echo e($variant->stock); ?>)"
+                                           class="text-info font-weight-bold text-xs me-4"
+                                           title="Add Stock">
+                                            <i class="fa-solid fa-warehouse"></i>
+                                        </a>
+                                        <form id="delete-form-<?php echo e($variant->id); ?>"
+                                              action="<?php echo e(route('admin.product-variants.destroy', $variant->id)); ?>"
+                                              method="POST" style="display:none;">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('DELETE'); ?>
+                                        </form>
+                                        <a href="javascript:void(0);"
+                                           onclick="confirmDelete(<?php echo e($variant->id); ?>)">
+                                            <i class="fa-solid fa-trash text-danger font-weight-bold text-xs"></i>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
 
@@ -248,6 +256,49 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Stock Update Modal -->
+                            <div class="modal fade" id="stockModal" tabindex="-1" aria-labelledby="stockModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="stockModalLabel">Add Stock</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form id="stockUpdateForm" action="<?php echo e(route('admin.stock.update')); ?>" method="POST">
+                                            <?php echo csrf_field(); ?>
+                                            <div class="modal-body text-start">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="mb-3">
+                                                            <label for="stock_variant_id" class="form-label">Variant SKU</label>
+                                                            <input type="text" class="form-control" id="stock_variant_id" readonly>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="current_stock" class="form-label">Current Stock</label>
+                                                            <input type="number" class="form-control" id="current_stock" readonly>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="new_stock" class="form-label">Stock to Add <span class="text-danger">*</span></label>
+                                                            <input type="number" class="form-control" id="new_stock" name="stock" 
+                                                                   min="0" required placeholder="Enter quantity to add">
+                                                            <small class="text-muted">This amount will be added to the current stock</small>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="stock_notes" class="form-label">Notes</label>
+                                                            <textarea class="form-control" id="stock_notes" name="notes" rows="3" 
+                                                                      placeholder="Optional notes about this stock update"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-primary">Update Stock</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <tr>
                                 <td colspan="8" class="text-center py-4">
@@ -281,6 +332,31 @@ function confirmDelete(variantId) {
     if (confirm('Are you sure you want to delete this product variant?')) {
         document.getElementById('delete-form-' + variantId).submit();
     }
+}
+
+function openStockModal(variantId, sku, currentStock) {
+    document.getElementById('stock_variant_id').value = sku;
+    document.getElementById('current_stock').value = currentStock;
+    document.getElementById('new_stock').value = ''; // Clear the input for user to enter amount to add
+    document.getElementById('stock_notes').value = '';
+    
+    // Add hidden input for variant ID
+    const form = document.getElementById('stockUpdateForm');
+    const existingInput = document.getElementById('variant_id_input');
+    if (existingInput) {
+        existingInput.remove();
+    }
+    
+    const hiddenInput = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = 'variant_id';
+    hiddenInput.id = 'variant_id_input';
+    hiddenInput.value = variantId;
+    form.appendChild(hiddenInput);
+    
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('stockModal'));
+    modal.show();
 }
 
 document.addEventListener('DOMContentLoaded', function() {

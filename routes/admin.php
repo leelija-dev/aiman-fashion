@@ -145,6 +145,9 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
             ]
         ])->except(['show']);
 
+        // Stock Update
+        Route::post('/stock/update', [StockController::class, 'updateVariantStock'])->name('admin.stock.update');
+
         // Products
         Route::resource('products', AdminProductController::class, [
             'parameters' => ['products' => 'product:id'],

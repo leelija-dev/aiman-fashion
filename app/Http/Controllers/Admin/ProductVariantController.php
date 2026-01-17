@@ -18,37 +18,37 @@ class ProductVariantController extends Controller
     public function index(Request $request)
     {
         $query = ProductVariant::with(['product', 'colorModel', 'sizeModel']);
-        
+
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('sku', 'like', "%{$search}%")
-                  ->orWhere('size', 'like', "%{$search}%")
-                  ->orWhere('color', 'like', "%{$search}%")
-                  ->orWhereHas('product', function ($productQuery) use ($search) {
-                      $productQuery->where('name', 'like', "%{$search}%");
-                  });
+                    ->orWhere('size', 'like', "%{$search}%")
+                    ->orWhere('color', 'like', "%{$search}%")
+                    ->orWhereHas('product', function ($productQuery) use ($search) {
+                        $productQuery->where('name', 'like', "%{$search}%");
+                    });
             });
         }
-        
+
         if ($request->filled('product_id')) {
             $query->where('product_id', $request->input('product_id'));
         }
-        
+
         if ($request->filled('color')) {
             $query->where('color', $request->input('color'));
         }
-        
+
         if ($request->filled('size')) {
             $query->where('size', $request->input('size'));
         }
-        
+
         $data = $query->orderBy('product_id')->orderBy('color')->orderBy('size')->paginate(15);
-        
+
         $products = Product::select('id', 'name')->orderBy('name')->get();
         $colors = Color::select('name')->distinct()->orderBy('name')->pluck('name');
         $sizes = Size::select('name')->distinct()->orderBy('name')->pluck('name');
-        
+
         return view('Admin.product-variant.index', compact('data', 'products', 'colors', 'sizes'));
     }
 
@@ -60,7 +60,7 @@ class ProductVariantController extends Controller
         $products = Product::select('id', 'name')->orderBy('name')->get();
         $colors = Color::select('name')->distinct()->orderBy('name')->pluck('name');
         $sizes = Size::select('name')->distinct()->orderBy('name')->pluck('name');
-        
+
         return view('Admin.product-variant.create', compact('products', 'colors', 'sizes'));
     }
 
@@ -112,7 +112,7 @@ class ProductVariantController extends Controller
         $products = Product::select('id', 'name')->orderBy('name')->get();
         $colors = Color::select('name')->distinct()->orderBy('name')->pluck('name');
         $sizes = Size::select('name')->distinct()->orderBy('name')->pluck('name');
-        
+
         return view('Admin.product-variant.edit', compact('productVariant', 'products', 'colors', 'sizes'));
     }
 
@@ -125,10 +125,10 @@ class ProductVariantController extends Controller
             'product_id' => 'required|exists:products,id',
             'size' => 'nullable|string|max:20',
             'color' => 'nullable|string|max:50',
-            'sku' => 'required|string|max:100|unique:product_variants,sku,'.$productVariant->id,
+            'sku' => 'required|string|max:100|unique:product_variants,sku,' . $productVariant->id,
             'price' => 'required|numeric|min:0',
             'discount_price' => 'nullable|numeric|min:0|lt:price',
-            'stock' => 'required|integer|min:0',
+            // 'stock' => 'required|integer|min:0',
         ], [
             'product_id.unique_combination' => 'This product already has a variant with the same size and color combination.',
         ]);
@@ -146,13 +146,19 @@ class ProductVariantController extends Controller
                 ->withErrors(['unique_combination' => 'This product already has a variant with the same size and color combination.']);
         }
 
-        $productVariant->update($data);
+        // $productVariant->update($data);
+        $productVariant->update([
+            'product_id'      => $request->product_id,
+            'sku'             => $request->sku,
+            'price'           => $request->price,
+            'discount_price'  => $request->discount_price,
+            'color'           => $request->color,
+            'size'            => $request->size,
+        ]);
 
-        // Update or create stock entry for the variant
-        StockIn::updateOrCreate(
-            ['product_variant_id' => $productVariant->id],
-            ['stock' => $data['stock']]
-        );
+
+        // Note: Stock is managed separately through Stock Management
+        // Stock entry is not updated here since stock field is readonly in edit form
 
         return redirect()->route('admin.product-variants')->with('success', 'Product variant updated successfully!');
     }
@@ -164,9 +170,9 @@ class ProductVariantController extends Controller
     {
         // Delete the associated stock entry
         StockIn::where('product_variant_id', $productVariant->id)->delete();
-        
+
         $productVariant->delete();
-        
+
         return redirect()->route('admin.product-variants')->with('success', 'Product variant deleted successfully!');
     }
 
@@ -181,7 +187,7 @@ class ProductVariantController extends Controller
             ->orderBy('color')
             ->orderBy('size')
             ->get();
-            
+
         return response()->json($variants);
     }
 }

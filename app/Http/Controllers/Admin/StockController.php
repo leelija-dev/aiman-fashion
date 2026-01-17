@@ -15,6 +15,8 @@ use App\Models\Unit;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\StockHistory;
+use App\Models\ProductVariant;
+use App\Models\StockIn;
 use Illuminate\Http\Request;
 
 
@@ -377,5 +379,36 @@ class StockController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to deduct stock: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Update stock for a product variant.
+     */
+    public function updateVariantStock(Request $request)
+    {
+        $request->validate([
+            'variant_id' => 'required|exists:product_variants,id',
+            'stock' => 'required|integer|min:0',
+            'notes' => 'nullable|string|max:255',
+        ]);
+
+        $variant = ProductVariant::findOrFail($request->variant_id);
+        
+        // Calculate new total stock (current stock + added stock)
+        $currentStock = $variant->stock;
+        $addedStock = $request->stock;
+        $newTotalStock = $currentStock + $addedStock;
+        
+        // Create new stock entry with the added amount
+        StockIn::create([
+            'product_variant_id' => $variant->id,
+            'stock' => $addedStock, // Store the amount being added
+        ]);
+
+        // Update variant stock with the new total
+        $variant->update(['stock' => $newTotalStock]);
+
+        return redirect()->route('admin.product-variants')
+            ->with('success', "Stock updated successfully for {$variant->sku}! Added {$addedStock} units to previous {$currentStock} units. New total: {$newTotalStock} units.");
     }
 }
