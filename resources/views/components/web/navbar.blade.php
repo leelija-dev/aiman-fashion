@@ -1,219 +1,170 @@
-<header
-  class="sticky top-[-1px] z-50 bg-gradient-to-r from-green-700/95 via-green-600/95 to-emerald-600/95 backdrop-blur supports-[backdrop-filter]:bg-opacity-90 text-white shadow-lg">
-  <nav
-    class="container mx-auto px-4 py-3 md:py-4 flex items-center gap-4">
-    <!-- Logo -->
-    <a
-      href="/"
-      class="text-2xl md:text-3xl font-bold tracking-tight flex items-center hover:scale-105 transition-transform duration-200">
-      <img src="{{asset('web/images/amarmaa-text.webp')}}" class="max-h-[35px] h-auto" alt="">
-    </a>
-
-
-
-    <!-- Desktop Menu -->
-    <ul class="hidden lg:flex space-x-8 items-center ml-auto">
-
-      <li>
-        <a
-          href="#weekly-deals"
-          class="text-base lg:text-lg hover:text-green-200 transition-colors duration-200 flex items-center">
-          <svg
-            class="w-5 h-5 mr-1"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-          </svg>
-          Deals
-        </a>
-      </li>
-      <li>
-        <a
-          href="#about"
-          class="text-base lg:text-lg hover:text-green-200 transition-colors duration-200 flex items-center">
-          <svg
-            class="w-5 h-5 mr-1"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-          About
-        </a>
-      </li>
-      <li>
-        <a
-          href="#contact"
-          class="text-base lg:text-lg hover:text-green-200 transition-colors duration-200 flex items-center">
-          <svg
-            class="w-5 h-5 mr-1"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-          </svg>
-          Contact
-        </a>
-      </li>
-    </ul>
-
-    <!-- Desktop Actions -->
-    <div class="hidden lg:flex items-center gap-3 ml-2">
-          <!-- <a href="/account" class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/15 text-white" aria-label="Account">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1118.9 6.197M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-          </a> -->
-          <a href="/admin/login" class=" xl:inline-flex items-center rounded-xl bg-white text-green-700 font-semibold px-4 py-2 hover:bg-green-50 shadow">
-      Login
-    </a>
-         
-         
+  <header
+      id="nav-wrapper"
+      class="bg-white shadow-sm sticky top-0 lg:z-[20004] z-[20000] px-3"
+    >
+      <!-- Top Bar: Special Offer + Product Title (hidden on small screens for product title) -->
+      <div class="text-sm text-gray-600 px-6 py-2 border-b">
+        <div
+          class="container mx-auto flex smx:flex-nowrap flex-wrap smx:justify-between justify-center items-center"
+        >
+          <p>
+            Special offer get <span class="font-semibold">25% off</span>
+            <a href="#" class="underline ml-1">T&amp;C</a>
+          </p>
+          <p
+            class="hidden md:inline-block text-2xl font-semibold tracking-wide"
+          >
+            Aiman
+          </p>
+          <p class="text-gray-700">Womens Denim Jacket (Blue)</p>
         </div>
-    <div class="ml-auto lg:hidden flex justify-end items-center gap-3 ">
-      <a href="/admin/login" class=" xl:inline-flex items-center rounded-xl bg-white text-green-700 font-semibold px-4 py-2 hover:bg-green-50 shadow">
-      Login
-    </a>
+      </div>
 
-    <!-- Mobile Menu Button -->
-    <button
-      id="mobile-menu-button"
-      class="lg:hidden  focus:outline-none p-2 rounded-lg hover:bg-green-700 transition"
-      aria-label="Open menu"
-      aria-controls="mobile-sidebar"
-      aria-expanded="false">
-      <svg
-        class="w-7 h-7"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"></path>
-      </svg>
-    </button>
-    </div>
-  </nav>
+      <!-- Main Header -->
+      <div class=" py-4 flex items-center justify-between gap-6 container mx-auto">
+        <!-- Left: Logo + Desktop Nav -->
+        <div class="lgg:flex hidden items-center gap-8 flex-1">
+          <!-- Logo -->
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-blue-700 rounded-sm"></div>
+          </div>
 
-  <!-- Mobile Sidebar -->
-  <div id="mobile-sidebar" class="mobile-sidebar">
-    <div class="py-6">
-      <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center">
-          <svg
-            class="w-8 h-8 mr-2 text-green-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 3h18M9 3v18m6-18v18M3 9h18M3 15h18"></path>
-          </svg>
-          <span class="text-2xl font-bold text-white">WoCommerce</span>
+          <!-- Desktop Navigation -->
+          <nav
+            class="hidden lgg:flex items-center gap-6 text-gray-700 font-medium"
+          >
+            <a href="#" class="hover:text-black">Salwar Kameez</a>
+            <a href="#" class="hover:text-black">Lehengas</a>
+            <a href="#" class="hover:text-black">Bridal</a>
+            <a href="#" class="hover:text-black">Wedding</a>
+          </nav>
         </div>
-        <button id="close-sidebar" class="text-white hover:text-green-200" aria-label="Close menu">
-          <svg
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
+
+        <!-- Mobile Menu Button -->
+        <button
+          id="mobile-menu-btn"
+          class="lgg:hidden text-gray-700 hover:text-black"
+        >
+          <i class="fa-solid fa-bars text-2xl"></i>
+        </button>
+
+        <!-- Right Section -->
+        <div class="flex items-center gap-4">
+          <!-- Search (visible on sm and up) -->
+          <div class="relative hidden sm:block">
+            <input
+              type="text"
+              placeholder="Search here"
+              class="pl-4 pr-10 py-2 rounded-full bg-gray-100 text-sm outline-none w-56"
+            />
+            <i
+              class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
+            ></i>
+          </div>
+
+          <!-- Mobile Search Icon -->
+          <button class="sm:hidden text-gray-700 hover:text-black">
+            <i class="fa-solid fa-magnifying-glass text-lg"></i>
+          </button>
+
+          <!-- Icons -->
+          <button class="text-gray-700 hover:text-black">
+            <i class="fa-regular fa-heart text-lg"></i>
+          </button>
+
+          <button class="text-gray-700 hover:text-black">
+            <i class="fa-solid fa-bag-shopping text-lg"></i>
+          </button>
+
+          <!-- Profile with Dropdown -->
+          <div class="relative">
+            <button
+              id="profile-btn"
+              class="flex items-center gap-2 text-gray-700 hover:text-black"
+            >
+              <img
+                src="https://i.pravatar.cc/32"
+                alt="User"
+                class="w-8 h-8 rounded-full object-cover"
+              />
+              <span class="hidden sm:block text-sm">Anne Doe</span>
+              <i class="fa-solid fa-chevron-down text-xs hidden sm:block"></i>
+            </button>
+
+            <!-- Account Dropdown -->
+            <div
+              id="account-dropdown"
+              class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 hidden z-50"
+            >
+              <a
+                href="#"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >My Profile</a
+              >
+              <a
+                href="#"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >Orders</a
+              >
+              <a
+                href="#"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >Wishlist</a
+              >
+              <hr class="my-1" />
+              <a
+                href="#"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >Logout</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Sidebar -->
+    <div
+      id="mobile-sidebar"
+      class="fixed inset-y-0 left-0 w-64 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-[20005] lg:hidden"
+    >
+      <div class="flex items-center justify-between p-6 border-b">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-blue-700 rounded-sm"></div>
+          <span class="text-xl font-semibold">Aiman</span>
+        </div>
+        <button id="close-sidebar-btn" class="text-gray-700 hover:text-black">
+          <i class="fa-solid fa-xmark text-2xl"></i>
         </button>
       </div>
 
+      <!-- Mobile Search -->
+      <div class="p-6 border-b">
+        <div class="relative">
+          <input
+            type="text"
+            placeholder="Search here"
+            class="w-full pl-4 pr-10 py-2 rounded-full bg-gray-100 text-sm outline-none"
+          />
+          <i
+            class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
+          ></i>
+        </div>
+      </div>
 
-
-      <ul class="space-y-4">
-
-        <li>
-          <a
-            href="#weekly-deals"
-            class="text-white hover:text-green-200 transition-colors duration-200 flex items-center">
-            <svg
-              class="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-            </svg>
-            Deals
-          </a>
-        </li>
-        <li>
-          <a
-            href="#about"
-            class="text-white hover:text-green-200 transition-colors duration-200 flex items-center">
-            <svg
-              class="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            About
-          </a>
-        </li>
-        <li>
-          <a
-            href="#contact"
-            class="text-white hover:text-green-200 transition-colors duration-200 flex items-center">
-            <svg
-              class="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-            </svg>
-            Contact
-          </a>
-        </li>
-      </ul>
-
-      <!-- Mobile Quick Actions -->
-      <!-- <div class="mt-6 grid grid-cols-2 gap-3">
-            <a href="/account" class="inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 hover:bg-white/15 text-white py-2.5">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1118.9 6.197M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              Account
-            </a>
-            
-          </div> -->
+      <!-- Mobile Navigation -->
+      <nav class="p-6">
+        <ul class="space-y-4 text-gray-700 font-medium">
+          <li><a href="#" class="block hover:text-black">Salwar Kameez</a></li>
+          <li><a href="#" class="block hover:text-black">Lehengas</a></li>
+          <li><a href="#" class="block hover:text-black">Bridal</a></li>
+          <li><a href="#" class="block hover:text-black">Wedding</a></li>
+        </ul>
+      </nav>
     </div>
-  </div>
 
-  <!-- Overlay -->
-  <div id="sidebar-overlay" class="mobile-sidebar-overlay"></div>
-</header>
+    <!-- Overlay for mobile sidebar -->
+    <div
+      id="sidebar-overlay"
+      class="fixed inset-0 bg-black bg-opacity-50 hidden z-[20004] lg:hidden"
+    ></div>

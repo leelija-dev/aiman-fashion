@@ -1,186 +1,161 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const hero = document.querySelector(".hero-bg");
-    hero.classList.add("animate-fade-in");
+$(document).ready(function () {
+  var secondOwl;
+  var mainOwl;
+  var bannerOwl; // New variable for banner carousel
+
+  function initCarousels() {
+    var width = $(window).width();
+
+    // Initialize or re-initialize banner carousel (for screens < 992px)
+    if ($(".banner-carousel").length) {
+      if (bannerOwl) {
+        $(".banner-carousel")
+          .trigger("destroy.owl.carousel")
+          .removeClass("owl-loaded")
+          .find(".owl-stage-outer")
+          .children()
+          .unwrap();
+      }
+
+      // Only initialize if screen width is less than 992px
+      if (width < 992) {
+        bannerOwl = $(".banner-carousel").owlCarousel({
+          loop: true,
+          margin: 10,
+          nav: true,
+          navText: [
+            '<i class="fas fa-chevron-left"></i>',
+            '<i class="fas fa-chevron-right"></i>',
+          ],
+          dots: true,
+          autoplay: true,
+          autoplayTimeout: 4000,
+          autoplayHoverPause: true,
+          items: 1,
+          responsive: {
+            0: { items: 1, margin: 10 },
+            768: { items: 1, margin: 20 },
+          },
+        });
+      } else {
+        // Destroy if exists and screen is desktop
+        if (bannerOwl) {
+          $(".banner-carousel")
+            .trigger("destroy.owl.carousel")
+            .removeClass("owl-loaded")
+            .find(".owl-stage-outer")
+            .children()
+            .unwrap();
+          bannerOwl = null;
+        }
+      }
+    }
+
+    // Initialize or re-initialize .second-owl (dots always true in your current setup)
+    if ($(".second-owl").length) {
+      if (secondOwl) {
+        $(".second-owl")
+          .trigger("destroy.owl.carousel")
+          .removeClass("owl-loaded")
+          .find(".owl-stage-outer")
+          .children()
+          .unwrap();
+      }
+      secondOwl = $(".second-owl").owlCarousel({
+        loop: true,
+        margin: 24,
+        navText: [
+          '<i class="fas fa-chevron-left"></i>',
+          '<i class="fas fa-chevron-right"></i>',
+        ],
+        dots: true,
+        autoplay: true,
+        autoplayTimeout: 3000,
+        autoplayHoverPause: true,
+        responsive: {
+          0: { items: 1 },
+          550: { items: 2 },
+          1000: { items: 2 },
+          1200: { items: 3 },
+        },
+      });
+    }
+
+    // Initialize or re-initialize .main-owl (nav always true in your current setup)
+    if ($(".main-owl").length) {
+      if (mainOwl) {
+        $(".main-owl")
+          .trigger("destroy.owl.carousel")
+          .removeClass("owl-loaded")
+          .find(".owl-stage-outer")
+          .children()
+          .unwrap();
+      }
+      mainOwl = $(".main-owl").owlCarousel({
+        loop: true,
+        margin: 24,
+        nav: true,
+        navText: [
+          '<i class="fas fa-chevron-left"></i>',
+          '<i class="fas fa-chevron-right"></i>',
+        ],
+        dots: false,
+        autoplay: true,
+        autoplayTimeout: 3000,
+        autoplayHoverPause: true,
+        responsive: {
+          0: { items: 1, margin: 10 },
+          450: { items: 2, margin: 16 },
+          768: { items: 3, margin: 20 },
+          1024: { items: 4 },
+          1280: { items: 5 },
+        },
+      });
+    }
+  }
+
+  // Initial initialization
+  initCarousels();
+
+  // Re-initialize on window resize (with debounce to avoid too many calls)
+  var resizeTimer;
+  $(window).on("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(initCarousels, 300);
+  });
 });
 
-const mobileMenuButton = document.getElementById("mobile-menu-button");
-const mobileMenu = document.getElementById("mobile-sidebar");
-const sidebarOverlay = document.getElementById("sidebar-overlay");
+// Mobile menu toggle
+const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+const closeSidebarBtn = document.getElementById("close-sidebar-btn");
+const sidebar = document.getElementById("mobile-sidebar");
+const overlay = document.getElementById("sidebar-overlay");
 
-if (mobileMenuButton && mobileMenu && sidebarOverlay) {
-    // Toggle sidebar and overlay
-    mobileMenuButton.addEventListener("click", () => {
-        const isOpen = mobileMenu.classList.contains("show");
-        if (!isOpen) {
-            // Opening: Remove hidden and trigger slide-in
-            mobileMenu.classList.remove("hidden");
-            mobileMenu.classList.add("show");
-            mobileMenu.classList.add("slide-in");
-            mobileMenu.classList.remove("slide-out");
-            sidebarOverlay.classList.add("show");
-        } else {
-            // Closing: Trigger slide-out
-            mobileMenu.classList.add("slide-out");
-            mobileMenu.classList.remove("slide-in");
-            mobileMenu.classList.remove("show");
-            sidebarOverlay.classList.remove("show");
-        }
-    });
+mobileMenuBtn.addEventListener("click", () => {
+  sidebar.classList.remove("-translate-x-full");
+  overlay.classList.remove("hidden");
+});
 
-    // Close sidebar when clicking overlay
-    sidebarOverlay.addEventListener("click", () => {
-        mobileMenu.classList.add("slide-out");
-        mobileMenu.classList.remove("slide-in");
-        mobileMenu.classList.remove("show");
-        sidebarOverlay.classList.remove("show");
-    });
+closeSidebarBtn.addEventListener("click", () => {
+  sidebar.classList.add("-translate-x-full");
+  overlay.classList.add("hidden");
+});
 
-    // Close sidebar button
-    const closeSidebarButton = document.getElementById("close-sidebar");
-    if (closeSidebarButton) {
-        closeSidebarButton.addEventListener("click", () => {
-            mobileMenu.classList.add("slide-out");
-            mobileMenu.classList.remove("slide-in");
-            mobileMenu.classList.remove("show");
-            sidebarOverlay.classList.remove("show");
-        });
-    }
+overlay.addEventListener("click", () => {
+  sidebar.classList.add("-translate-x-full");
+  overlay.classList.add("hidden");
+});
 
-    // Close sidebar when any link inside it is clicked
-    const sidebarLinks = mobileMenu.querySelectorAll("a");
-    sidebarLinks.forEach((link) => {
-        link.addEventListener("click", () => {
-            mobileMenu.classList.add("slide-out");
-            mobileMenu.classList.remove("slide-in");
-            mobileMenu.classList.remove("show");
-            sidebarOverlay.classList.remove("show");
-        });
-    });
+// Account dropdown toggle
+const profileBtn = document.getElementById("profile-btn");
+const dropdown = document.getElementById("account-dropdown");
 
-    // Add transitionend listener to apply hidden class after slide-out
-    mobileMenu.addEventListener("transitionend", (e) => {
-        if (e.propertyName === "transform" && mobileMenu.classList.contains("slide-out")) {
-            mobileMenu.classList.add("hidden");
-        }
-    });
+profileBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  dropdown.classList.toggle("hidden");
+});
 
-    // Reset any inline styles that might interfere
-    mobileMenu.style.display = "";
-    sidebarOverlay.style.display = "";
-} else {
-    console.error(
-        "One or more elements not found: mobile-menu-button, mobile-sidebar, sidebar-overlay"
-    );
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    // Select links from both desktop and mobile navigations
-    const navLinks = document.querySelectorAll(
-        'ul li a[href^="#"], #mobile-sidebar ul li a[href^="#"]'
-    );
-    const sections = document.querySelectorAll("section");
-    const closeSidebarButton = document.getElementById("close-sidebar");
-    const mobileSidebar = document.getElementById("mobile-sidebar");
-
-    // Smooth scroll to section on link click
-    navLinks.forEach((link) => {
-        link.addEventListener("click", (e) => {
-            e.preventDefault();
-            const targetId = link.getAttribute("href").substring(1);
-            const targetSection = document.getElementById(targetId);
-
-            if (targetSection) {
-                targetSection.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                });
-
-                // Highlight the clicked link
-                navLinks.forEach((l) =>
-                    l.classList.remove("text-green-200", "font-bold")
-                );
-                link.classList.add("text-green-200", "font-bold");
-
-                // Close mobile sidebar if open
-                if (mobileSidebar && mobileSidebar.classList.contains("open")) {
-                    mobileSidebar.classList.remove("open");
-                    mobileSidebar.classList.add("hidden");
-                }
-            }
-        });
-    });
-
-    // Close sidebar on button click
-    if (closeSidebarButton && mobileSidebar) {
-        closeSidebarButton.addEventListener("click", () => {
-            mobileSidebar.classList.remove("open");
-            mobileSidebar.classList.add("hidden");
-        });
-    }
-
-    // Highlight link based on section visibility
-    const observerOptions = {
-        root: null,
-        rootMargin: "0px",
-        threshold: 0.3, // Highlight when 30% of section is visible
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-            const correspondingLink = document.querySelector(
-                `a[href="#${entry.target.id}"]`
-            );
-
-            // Check if correspondingLink exists before accessing classList
-            if (correspondingLink) {
-                if (entry.isIntersecting) {
-                    // Remove highlight from all links
-                    navLinks.forEach((link) =>
-                        link.classList.remove("text-green-200", "font-bold")
-                    );
-                    // Add highlight to the current section's link
-                    correspondingLink.classList.add(
-                        "text-green-200",
-                        "font-bold"
-                    );
-                } else {
-                    // Remove highlight when section is out of view
-                    correspondingLink.classList.remove(
-                        "text-green-200",
-                        "font-bold"
-                    );
-                }
-            } else {
-                console.warn(
-                    `No navigation link found for section with id: ${entry.target.id}`
-                );
-            }
-        });
-    }, observerOptions);
-
-    // Observe each section
-    sections.forEach((section) => {
-        if (section.id) {
-            observer.observe(section);
-        } else {
-            console.warn("Section found without an ID attribute");
-        }
-    });
-
-    // Ensure at least one link is highlighted when at the top of the page
-    window.addEventListener("scroll", () => {
-        const fromTop = window.scrollY;
-        if (fromTop < 100) {
-            // Adjust threshold as needed
-            navLinks.forEach((link) =>
-                link.classList.remove("text-green-200", "font-bold")
-            );
-            const firstLink = document.querySelector('a[href="#weekly-deals"]');
-            if (firstLink) {
-                firstLink.classList.add("text-green-200", "font-bold");
-            } else {
-                console.warn("First link (weekly-deals) not found");
-            }
-        }
-    });
+// Close dropdown when clicking outside
+document.addEventListener("click", () => {
+  dropdown.classList.add("hidden");
 });

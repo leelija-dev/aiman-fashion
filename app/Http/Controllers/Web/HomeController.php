@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Web;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Service\Services;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -21,8 +24,19 @@ class HomeController extends Controller
         //     ->get();
         // // dd($services);
         $data = Service::all();
-        $testimonials=[];
+        // $categories = Category::all();
 
-        return view('web.home', compact('data','testimonials'));
+        $products = DB::table('products')
+            ->where('is_active', 1)
+            ->get();
+
+            // dd($products);
+
+        $categories = Category::withCount('products')->get();
+
+
+        $testimonials = [];
+
+        return view('web.home', compact('data', 'testimonials', 'categories', 'products'));
     }
 }
