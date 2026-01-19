@@ -17,6 +17,9 @@
     <meta name="description" content="{{$pageMeta->meta_description ?? ''}}">
     <meta name="keywords" content="{{$pageMeta->meta_keyword ?? ''}}">
     <meta name="tag" content="{{$pageMeta->meta_tags ?? ''}}">
+    
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- PWA Manifest - FIXED PATH -->
     <link rel="manifest" href="/manifest.json" />

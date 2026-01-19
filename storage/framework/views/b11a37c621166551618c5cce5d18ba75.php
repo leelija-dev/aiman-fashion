@@ -157,8 +157,7 @@
                         <!-- Add To Cart (Hidden → Hover Show) -->
                         <div
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                            <button onclick="addToCart(<?php echo e($product->variant_id); ?>, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                 Add To Cart
                             </button>
                         </div>
@@ -167,7 +166,7 @@
                     <!-- Content -->
                     <div class="p-4 space-y-1">
                         <h3 class="text-[15px] font-semibold text-gray-900">
-                            <?php echo e($product->name); ?>
+                            <?php echo e($product->name); ?>, <?php echo e($product->size); ?>, <?php echo e($product->color); ?>
 
                         </h3>
 
@@ -730,8 +729,7 @@
                         <!-- Add To Cart (Hidden → Hover Show) -->
                         <div
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                            <button onclick="addToCart(<?php echo e($product->variant_id); ?>, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                 Add To Cart
                             </button>
                         </div>
@@ -802,8 +800,7 @@
                         <!-- Add To Cart (Hidden → Hover Show) -->
                         <div
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                            <button onclick="addToCart(<?php echo e($product->variant_id); ?>, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                 Add To Cart
                             </button>
                         </div>
@@ -874,8 +871,7 @@
                         <!-- Add To Cart (Hidden → Hover Show) -->
                         <div
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                            <button onclick="addToCart(<?php echo e($product->variant_id); ?>, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                 Add To Cart
                             </button>
                         </div>
@@ -946,8 +942,7 @@
                         <!-- Add To Cart (Hidden → Hover Show) -->
                         <div
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                            <button onclick="addToCart(<?php echo e($product->variant_id); ?>, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                 Add To Cart
                             </button>
                         </div>
@@ -1090,8 +1085,7 @@
                         <!-- Add To Cart (Hidden → Hover Show) -->
                         <div
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                            <button onclick="addToCart(<?php echo e($product->variant_id); ?>, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                 Add To Cart
                             </button>
                         </div>
@@ -1162,8 +1156,7 @@
                         <!-- Add To Cart (Hidden → Hover Show) -->
                         <div
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                            <button onclick="addToCart(<?php echo e($product->variant_id); ?>, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                 Add To Cart
                             </button>
                         </div>
@@ -1234,8 +1227,7 @@
                         <!-- Add To Cart (Hidden → Hover Show) -->
                         <div
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                            <button onclick="addToCart(<?php echo e($product->variant_id); ?>, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                 Add To Cart
                             </button>
                         </div>
@@ -1306,8 +1298,7 @@
                         <!-- Add To Cart (Hidden → Hover Show) -->
                         <div
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                            <button onclick="addToCart(<?php echo e($product->variant_id); ?>, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                 Add To Cart
                             </button>
                         </div>
@@ -1503,8 +1494,7 @@
                         <!-- Add To Cart (Hidden → Hover Show) -->
                         <div
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                            <button onclick="addToCart(<?php echo e($product->variant_id); ?>, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                 Add To Cart
                             </button>
                         </div>
@@ -1575,8 +1565,7 @@
                         <!-- Add To Cart (Hidden → Hover Show) -->
                         <div
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                            <button onclick="addToCart(<?php echo e($product->variant_id); ?>, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                 Add To Cart
                             </button>
                         </div>
@@ -1647,8 +1636,7 @@
                         <!-- Add To Cart (Hidden → Hover Show) -->
                         <div
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                            <button onclick="addToCart(<?php echo e($product->variant_id); ?>, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                 Add To Cart
                             </button>
                         </div>
@@ -1719,8 +1707,7 @@
                         <!-- Add To Cart (Hidden → Hover Show) -->
                         <div
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button
-                                class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                            <button onclick="addToCart(<?php echo e($product->variant_id); ?>, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                 Add To Cart
                             </button>
                         </div>
@@ -1762,6 +1749,83 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Owl Carousel JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+<!-- Cart Functionality -->
+<script>
+function addToCart(variantId, event) {
+    // Show loading state
+    const button = event.target;
+    const originalText = button.textContent;
+    button.textContent = 'Adding...';
+    button.disabled = true;
+  
+    // Create form data
+    const formData = new FormData();
+    formData.append('variant_id', variantId);
+    formData.append('count', 1);
+    console.log(formData);
+    // Get CSRF token
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    
+    // Send AJAX request
+    fetch('/cart/add', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': token,
+            'Accept': 'application/json'
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        if (data.success) {
+            showNotification(data.message, 'success');
+            updateCartCount(data.cart_count);
+        } else {
+            showNotification(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('An error occurred while adding to cart', 'error');
+    })
+    .finally(() => {
+        button.textContent = originalText;
+        button.disabled = false;
+    });
+}
+
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white transform transition-transform duration-300 translate-x-full ${
+        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+    }`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+    }, 100);
+    
+    setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+function updateCartCount(count) {
+    const cartCountElements = document.querySelectorAll('.cart-count');
+    cartCountElements.forEach(element => {
+        element.textContent = count;
+    });
+}
+</script>
 
 
 

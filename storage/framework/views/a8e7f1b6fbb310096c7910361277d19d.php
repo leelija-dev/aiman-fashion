@@ -17,6 +17,9 @@
     <meta name="description" content="<?php echo e($pageMeta->meta_description ?? ''); ?>">
     <meta name="keywords" content="<?php echo e($pageMeta->meta_keyword ?? ''); ?>">
     <meta name="tag" content="<?php echo e($pageMeta->meta_tags ?? ''); ?>">
+    
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
     <!-- PWA Manifest - FIXED PATH -->
     <link rel="manifest" href="/manifest.json" />

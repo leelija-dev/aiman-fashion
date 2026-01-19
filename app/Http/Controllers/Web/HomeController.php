@@ -26,11 +26,25 @@ class HomeController extends Controller
         $data = Service::all();
         // $categories = Category::all();
 
+        // $products = DB::table('products')
+        //     ->where('is_active', 1)
+        //     ->get();
+
         $products = DB::table('products')
-            ->where('is_active', 1)
+            ->rightJoin('product_variants', 'products.id', '=', 'product_variants.product_id')
+            ->where('products.is_active', 1)
+            ->select(
+                'products.*',
+                'product_variants.id as variant_id',
+                'product_variants.size',
+                'product_variants.color',
+                'product_variants.price',
+                'product_variants.stock'
+            )
             ->get();
 
-            // dd($products);
+
+       
 
         $categories = Category::withCount('products')->get();
 

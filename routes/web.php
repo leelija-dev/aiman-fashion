@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\CartController;
 
 
 // use App\Http\Controllers\Web\PageController;
@@ -29,6 +30,10 @@ use App\Http\Controllers\Web\HomeController;
 
 
 Route::get('/', [HomeController::class, 'home'])->name('page.index');
+
+// Cart Routes
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+
 Route::fallback(function () { abort(404); });
 
 // Route::get('/career', [CareerController::class, 'index'])->name('page.career');
