@@ -30,10 +30,12 @@ use App\Http\Controllers\Web\CartController;
 
 
 Route::get('/', [HomeController::class, 'home'])->name('page.index');
-Route::view('/cart', 'web.cart')->name('page.cart');
 
 // Cart Routes
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/remove/{id}', [CartController::class, 'destroy'])->name('cart.remove');
 
 Route::fallback(function () { abort(404); });
 

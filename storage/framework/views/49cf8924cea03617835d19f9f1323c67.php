@@ -1,13 +1,4 @@
-@extends('layout.web.main-layout')
-
-
-
-
-
-
-
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 
  <section class="px-4 lg:pb-12 pb-6 lg:pt-6 pt-4 bg-gray-50 ">
@@ -20,14 +11,14 @@
             </div>
           </div>
           <p class="text-sm text-gray-600">
-            @if($subtotal < 400)
-              Spend ${{ number_format(400 - $subtotal, 2) }} more and get free shipping!
-            @else
+            <?php if($subtotal < 400): ?>
+              Spend $<?php echo e(number_format(400 - $subtotal, 2)); ?> more and get free shipping!
+            <?php else: ?>
               🎉 You've qualified for free shipping!
-            @endif
+            <?php endif; ?>
           </p>
           <div class="mt-2 text-sm font-medium text-gray-700">
-            Cart ({{ $cartCount }} {{ $cartCount == 1 ? 'item' : 'items' }})
+            Cart (<?php echo e($cartCount); ?> <?php echo e($cartCount == 1 ? 'item' : 'items'); ?>)
           </div>
         </div>
 
@@ -49,58 +40,61 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @forelse ($cartItems as $item)
+                  <?php $__empty_1 = true; $__currentLoopData = $cartItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                   <tr class="border-b border-gray-200 hover:bg-gray-50">
                     <td class="px-6 py-6">
                       <div class="flex items-center gap-4">
                         <div
                           class="w-24 h-32 bg-gray-200 border-2 border-dashed rounded-lg flex-shrink-0 flex items-center justify-center text-gray-400 text-xs overflow-hidden"
                         >
-                          @if($item->product && $item->product->images->first())
+                          <?php if($item->product && $item->product->images->first()): ?>
                             <img
                               class="object-cover object-top object-center w-full h-full"
-                              src="{{ asset($item->product->images->first()->image_path) }}"
-                              alt="{{ $item->product->name }}"
+                              src="<?php echo e(asset($item->product->images->first()->image_path)); ?>"
+                              alt="<?php echo e($item->product->name); ?>"
                             />
-                          @else
+                          <?php else: ?>
                             <span>No Image</span>
-                          @endif
+                          <?php endif; ?>
                         </div>
                         <div>
                           <h3 class="font-medium text-gray-900">
-                            {{ $item->product ? $item->product->name : 'Product Not Found' }}
+                            <?php echo e($item->product ? $item->product->name : 'Product Not Found'); ?>
+
                           </h3>
-                          @if($item->variant)
+                          <?php if($item->variant): ?>
                             <p class="text-sm text-gray-500">
-                              Size: {{ $item->variant->size ?? 'N/A' }}, Color: {{ $item->variant->color ?? 'N/A' }}
+                              Size: <?php echo e($item->variant->size ?? 'N/A'); ?>, Color: <?php echo e($item->variant->color ?? 'N/A'); ?>
+
                             </p>
-                          @endif
+                          <?php endif; ?>
                         </div>
                       </div>
                     </td>
 
-                    <td class="px-6 py-6 text-center">${{ number_format($item->price, 2) }}</td>
+                    <td class="px-6 py-6 text-center">$<?php echo e(number_format($item->price, 2)); ?></td>
 
                     <td class="px-6 py-6 text-center">
                       <div
                         class="flex items-center justify-center border border-gray-300 rounded-md inline-flex"
                       >
                         <button 
-                          onclick="updateQuantity({{ $item->id }}, {{ $item->count - 1 }})"
+                          onclick="updateQuantity(<?php echo e($item->id); ?>, <?php echo e($item->count - 1); ?>)"
                           class="px-3 py-1 hover:bg-gray-100"
-                          {{ $item->count <= 1 ? 'disabled' : '' }}
+                          <?php echo e($item->count <= 1 ? 'disabled' : ''); ?>
+
                         >
                           -
                         </button>
                         <input
                           type="text"
-                          value="{{ $item->count }}"
-                          id="quantity-{{ $item->id }}"
+                          value="<?php echo e($item->count); ?>"
+                          id="quantity-<?php echo e($item->id); ?>"
                           class="w-12 text-center border-x border-gray-300 py-1"
-                          onchange="updateQuantity({{ $item->id }}, parseInt(this.value))"
+                          onchange="updateQuantity(<?php echo e($item->id); ?>, parseInt(this.value))"
                         />
                         <button 
-                          onclick="updateQuantity({{ $item->id }}, {{ $item->count + 1 }})"
+                          onclick="updateQuantity(<?php echo e($item->id); ?>, <?php echo e($item->count + 1); ?>)"
                           class="px-3 py-1 hover:bg-gray-100"
                         >
                           +
@@ -109,12 +103,13 @@
                     </td>
 
                     <td class="px-6 py-6 text-center font-medium">
-                      ${{ number_format($item->price * $item->count, 2) }}
+                      $<?php echo e(number_format($item->price * $item->count, 2)); ?>
+
                     </td>
 
                     <td class="px-6 py-6 text-center">
                       <button 
-                        onclick="removeFromCart({{ $item->id }})"
+                        onclick="removeFromCart(<?php echo e($item->id); ?>)"
                         class="text-gray-400 hover:text-red-600 transition-colors"
                       >
                         <svg
@@ -134,7 +129,7 @@
                       </button>
                     </td>
                   </tr>
-                  @empty
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                   <tr>
                     <td colspan="5" class="px-6 py-12 text-center text-gray-500">
                       <div class="flex flex-col items-center gap-4">
@@ -143,13 +138,13 @@
                         </svg>
                         <p class="text-lg font-medium">Your cart is empty</p>
                         <p class="text-sm">Add some products to get started!</p>
-                        <a href="{{ route('page.index') }}" class="inline-flex items-center px-6 py-3 bg-black text-white rounded-md hover:bg-gray-800 transition-colors">
+                        <a href="<?php echo e(route('page.index')); ?>" class="inline-flex items-center px-6 py-3 bg-black text-white rounded-md hover:bg-gray-800 transition-colors">
                           Continue Shopping
                         </a>
                       </div>
                     </td>
                   </tr>
-                  @endforelse
+                  <?php endif; ?>
                 </tbody>
               </table>
             </div>
@@ -188,18 +183,18 @@
               <div class="space-y-4">
                 <div class="flex justify-between text-gray-700">
                   <span>Subtotal</span>
-                  <span>${{ number_format($subtotal, 2) }}</span>
+                  <span>$<?php echo e(number_format($subtotal, 2)); ?></span>
                 </div>
 
                 <div class="flex justify-between text-gray-700">
                   <span>Shipping</span>
                   <div class="text-right">
-                    @if($shipping == 0)
+                    <?php if($shipping == 0): ?>
                       <span class="block text-sm text-green-600">Free shipping!</span>
-                    @else
-                      <span class="block text-sm">${{ number_format($shipping, 2) }}</span>
+                    <?php else: ?>
+                      <span class="block text-sm">$<?php echo e(number_format($shipping, 2)); ?></span>
                       <span class="block text-xs text-gray-500">Free shipping over $400</span>
-                    @endif
+                    <?php endif; ?>
                     <a href="#" class="text-sm text-blue-600 hover:underline">Change address</a>
                   </div>
                 </div>
@@ -209,7 +204,7 @@
                     class="flex justify-between text-lg font-medium text-gray-900"
                   >
                     <span>Total</span>
-                    <span>${{ number_format($total, 2) }}</span>
+                    <span>$<?php echo e(number_format($total, 2)); ?></span>
                   </div>
                 </div>
 
@@ -226,7 +221,7 @@
     </section>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 <script>
 function updateQuantity(cartId, newQuantity) {
@@ -316,3 +311,4 @@ function showNotification(message, type) {
     }, 3000);
 }
 </script>
+<?php echo $__env->make('layout.web.main-layout', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xampp\htdocs\aiman\resources\views/web/cart.blade.php ENDPATH**/ ?>
