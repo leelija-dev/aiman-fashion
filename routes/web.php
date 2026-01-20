@@ -31,6 +31,9 @@ use App\Http\Controllers\Web\CartController;
 
 Route::get('/', [HomeController::class, 'home'])->name('page.index');
 Route::view('/cart', 'web.cart')->name('page.cart');
+Route::view('/checkout', 'web.checkout')->name('page.checkout');
+Route::view('/single-product', 'web.single-product')->name('page.single-product');
+Route::view('/multi-product', 'web.multi-product')->name('page.multi-product');
 
 // Cart Routes
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
