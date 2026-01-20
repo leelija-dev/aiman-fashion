@@ -34,6 +34,8 @@ Route::view('/cart', 'web.cart')->name('page.cart');
 Route::view('/checkout', 'web.checkout')->name('page.checkout');
 Route::view('/single-product', 'web.single-product')->name('page.single-product');
 Route::view('/multi-product', 'web.multi-product')->name('page.multi-product');
+Route::view('/login', 'web.login')->name('page.login');
+Route::view('/register', 'web.register')->name('page.register');
 
 // Cart Routes
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
