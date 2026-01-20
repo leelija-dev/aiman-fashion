@@ -30,6 +30,7 @@ use App\Http\Controllers\Web\CartController;
 
 
 Route::get('/', [HomeController::class, 'home'])->name('page.index');
+Route::view('/cart', 'web.cart')->name('page.cart');
 
 // Cart Routes
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
