@@ -57,7 +57,8 @@
                         </div>
                     </div>
 
-                    <form class="space-y-5" id="loginForm">
+                    <form action="<?php echo e(route('web.login')); ?>" method="post" class="space-y-5" id="loginForm">
+                        <?php echo csrf_field(); ?>
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                             <div class="relative">
@@ -126,7 +127,7 @@
 
 
 
-<script src="<?php echo e(asset('web/js/login.js')); ?>"></script>
+<!-- <script src="<?php echo e(asset('web/js/login.js')); ?>"></script> -->
 
 
 <?php $__env->stopSection(); ?>
