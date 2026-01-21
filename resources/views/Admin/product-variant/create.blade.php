@@ -5,6 +5,7 @@
 @section('title')
 {{ config('app.name') }} - Add Product Variant
 @endsection
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
 
 @section('content')
 <div class="container-fluid py-4">
@@ -13,7 +14,7 @@
             <div class="card-header pb-0">
                 <h6>Add New Product Variant</h6>
             </div>
-            <div class="card-body px-0 pt-0 pb-2">
+            <div class="card px-3 pt-3 pb-2">
                 @if ($errors->has('unique_combination'))
                     <div class="alert alert-danger">
                         {{ $errors->first('unique_combination') }}
@@ -53,6 +54,15 @@
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
                             </div>
+                    <div class="form-group">
+                                        <label class="text-uppercase text-secondary">Upload Gallery Images</label>
+                                        <div id="multiImageDropzone" class="dropzone"></div>
+                                        @error('images')
+                                            <span class="invalid-feedback d-block">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                            
                         </div>
 
                         <div class="col-md-6">
@@ -126,6 +136,32 @@
 @endsection
 
 @section('scripts')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Unit dropdown handling
+                const unitOptions = document.querySelectorAll('.unit-option');
+                const unitDropdownButton = document.getElementById('unitDropdownButton');
+                const unitIdInput = document.getElementById('unit_id');
+
+                unitOptions.forEach(option => {
+                    option.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const unitName = this.getAttribute('data-name');
+                        const unitId = this.getAttribute('data-id');
+                        unitDropdownButton.textContent = unitName;
+                        unitIdInput.value = unitId;
+                        unitIdInput.classList.remove('is-invalid');
+                        const feedback = unitIdInput.parentElement.querySelector('.invalid-feedback');
+                        if (feedback) feedback.style.display = 'none';
+                    });
+                });
+            });
+</script>
+
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Form validation

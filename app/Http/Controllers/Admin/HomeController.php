@@ -28,30 +28,31 @@ class HomeController extends Controller
 
     public function home()
     {
-        $email        = NewsLetter::all();
-        $application  = Application::all();
-        $vacancy      = JobVacancy::all();
-        $services     = Service::all();
-        $reply        = ContactReply::all();
-        $lead_contact = ContactUs::all();
-        $permission   = Permission::all();
-        $admin        = Admin::all();
+        // $email        = NewsLetter::all();
+        // $application  = Application::all();
+        // $vacancy      = JobVacancy::all();
+        // $services     = Service::all();
+        // $reply        = ContactReply::all();
+        // $lead_contact = ContactUs::all();
+        // $permission   = Permission::all();
+        // $admin        = Admin::all();
 
-        // ✅ Get today's profit and sales data
-        $todayData = $this->getProfitData('today');
+        // // ✅ Get today's profit and sales data
+        // $todayData = $this->getProfitData('today');
 
-        return view('Admin.home', [
-            'email'         => $email,
-            'application'   => $application,
-            'vacancy'       => $vacancy,
-            'service'       => $services,
-            'reply'         => $reply,
-            'lead_contact'  => $lead_contact,
-            'permission'    => $permission,
-            'admin'         => $admin,
-            'todayProfit'   => $todayData['total_profit'] ?? 0,
-            'todaySales'    => $todayData['total_sales'] ?? 0,
-        ]);
+        // return view('Admin.home', [
+        //     'email'         => $email,
+        //     'application'   => $application,
+        //     'vacancy'       => $vacancy,
+        //     'service'       => $services,
+        //     'reply'         => $reply,
+        //     'lead_contact'  => $lead_contact,
+        //     'permission'    => $permission,
+        //     'admin'         => $admin,
+        //     'todayProfit'   => $todayData['total_profit'] ?? 0,
+        //     'todaySales'    => $todayData['total_sales'] ?? 0,
+        // ]);
+        return view('Admin.home');
     }
 
     public function getDashboardData(Request $request)
