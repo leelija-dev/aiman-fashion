@@ -12,11 +12,13 @@
 </style>
 
 <div class="container-fluid mt-3">
-    <div class="row">
+    
+   <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="px-3 py-4">
-                    <div class="row mb-3 align-items-center">
+                <div class="px-3 py-4 text-center">
+                    <h3>Welcome Admin</h3>
+                   {{-- <div class="row mb-3 align-items-center">
                         <div class="col-md-6 mb-0">
                             <div class="" role="group">
                                 <button class="btn btn-sm btn-primary filter-btn mb-2" data-period="today">Today</button>
@@ -128,15 +130,15 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>--}}
                 </div>
             </div>
         </div>
     </div>
-</div>
+</div> 
 
 <!-- Custom Date Modal -->
-<div class="modal fade" id="customDateModal" tabindex="-1" aria-labelledby="customDateModalLabel" aria-hidden="true">
+{{-- <div class="modal fade" id="customDateModal" tabindex="-1" aria-labelledby="customDateModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -160,10 +162,10 @@
             </div>
         </div>
     </div>
-</div>
-@endsection
+</div>--}}
+@endsection 
 
-@push('scripts')
+{{-- @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/datatables.net@1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/datatables.net-bs5@1.13.6/js/dataTables.bootstrap5.min.js"></script>
@@ -2754,4 +2756,4 @@
         filterData('week');
     });
 </script>
-@endpush
+@endpush --}}

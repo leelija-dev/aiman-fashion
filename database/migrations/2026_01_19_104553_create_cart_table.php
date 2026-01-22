@@ -16,8 +16,8 @@ return new class extends Migration
 
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('variant_id');
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('session_id')->nullable();
+            // $table->unsignedBigInteger('user_id')->nullable();
+            // $table->string('session_id')->nullable();
 
             $table->integer('count'); // quantity
             $table->decimal('price', 10, 2);
@@ -35,13 +35,13 @@ return new class extends Migration
                   ->on('product_variants')
                   ->onDelete('cascade');
 
-            $table->foreign('user_id')
-                  ->references('id')
-                  ->on('users')
-                  ->onDelete('cascade');
+            // $table->foreign('user_id')
+            //       ->references('id')
+            //       ->on('users')
+            //       ->onDelete('cascade');
 
             // Indexes
-            $table->index(['user_id', 'session_id']);
+            // $table->index(['user_id', 'session_id']);
         });
     }
 

@@ -10,7 +10,7 @@ $roles = $user->getRoleNames();
 
 $admin = Admin::find($userId);
 
-$productAndUnit = request()->routeIs('admin.categories.*', 'admin.products.*', 'admin.unit.*', 'admin.brands.*', 'admin.colors.*', 'admin.sizes.*', 'admin.product-variants.*') ? true : false;
+$productAndUnit = request()->routeIs('admin.categories.*', 'admin.products.*', 'admin.unit.*', 'admin.brands.*', 'admin.colors.*', 'admin.sizes.*', 'admin.product-variants.*','admin.categories.create') ? true : false;
 $isNewsletterActive = false;
 $isEmailActive = false;
 @endphp
@@ -21,9 +21,9 @@ $isEmailActive = false;
     id="sidenav-main" style="background: white !important;">
     <div class="sidenav-header">
         <a class="navbar-brand m-0" href="{{route('Admin.dashboard')}}">
-            <!-- <div class="d-flex align-items-center" style="font-size: 30px;"><strong>amarmaa</strong>
-            </div> -->
-            <img src="{{ asset('web/images/amarmaa-text.webp') }}" alt="logo" class="pe-md-4">
+            <div class="d-flex align-items-center" style="font-size: 27px;"><strong><span class="text-success">Aiman</span><span class="text-info"> Royale</span></strong>
+            </div>
+            {{-- <img src="{{ asset('web/images/amarmaa-text.webp') }}" alt="logo" class="pe-md-4"> --}}
             {{-- <img src="{{ asset('images/site-img/logo.png') }}" alt="logo" class="pe-md-4"> --}}
             {{-- <img src="< ?php echo LOGO_WITH_PATH; ?>" alt="logo" class="pe-md-4"> --}}
         </a>
@@ -228,7 +228,7 @@ $isEmailActive = false;
             </div>
             </li> --}}
             {{-- @endif --}}
-            <li class="nav-item ">
+            {{-- <li class="nav-item ">
                 <a class="nav-link {{ request()->routeIs('admin.new-bill') ? 'active' : '' }}" href="{{ route('admin.new-bill') }}">
                     <div
                         class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -236,8 +236,8 @@ $isEmailActive = false;
                     </div>
                     <span class="nav-link-text ms-1">Generate Bill</span>
                 </a>
-            </li>
-            <li class="nav-item ">
+            </li> --}}
+            {{-- <li class="nav-item ">
                 <a class="nav-link {{ request()->routeIs('admin.print-bill') ? 'active' : '' }}" href="{{ route('admin.print-bill') }}">
                     <div
                         class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -245,16 +245,16 @@ $isEmailActive = false;
                     </div>
                     <span class="nav-link-text ms-1">Bill History</span>
                 </a>
-            </li>
+            </li> --}}
 
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('stocks.*') ? 'active' : '' }}" href="{{ route('stocks.index') }}">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="fas fa-boxes"></i>
                     </div>
                     <span class="nav-link-text ms-1">Stock Management</span>
                 </a>
-            </li>
+            </li> --}}
 
             <li class="nav-item has-submenu">
                 <a class="nav-link  submenu-toggle {{$productAndUnit ? 'active' : ''}}"
@@ -304,7 +304,7 @@ $isEmailActive = false;
                                 href="{{ route('admin.sizes') }}">Sizes</a>
                         </li>
                         <li class="submenu-item">
-                            <a class="submenu-link {{ request()->routeIs('admin.product-variants.*') ? 'active' : '' }} "
+                            <a class="submenu-link {{ request()->routeIs('admin.product-variants.*','admin.categories.create') ? 'active' : '' }} "
                                 href="{{ route('admin.product-variants') }}">Product Variants</a>
                         </li>
                     </ul>

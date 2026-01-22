@@ -101,7 +101,7 @@ class AuthController extends Controller
             //     ->causedBy(Auth::guard('admin')->user())
             //     ->log('Admin logged in');
             
-            return redirect()->intended(route('admin.new-bill'));
+            return redirect()->intended(route('Admin.dashboard'));
         }
         
         // Increment login attempts on failure
