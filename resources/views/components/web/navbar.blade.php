@@ -33,10 +33,16 @@
           <nav
             class="hidden lgg:flex items-center gap-6 text-gray-700 font-medium"
           >
-            <a href="#" class="hover:text-black">Salwar Kameez</a>
-            <a href="#" class="hover:text-black">Lehengas</a>
-            <a href="#" class="hover:text-black">Bridal</a>
-            <a href="#" class="hover:text-black">Wedding</a>
+            @if(isset($categories) && count($categories) > 0)
+              @foreach($categories as $category)
+                <a href="{{ route('category.show', $category->slug) }}" class="hover:text-black">{{ $category->name }}</a>
+              @endforeach
+            @else
+              <a href="#" class="hover:text-black">Salwar Kameez</a>
+              <a href="#" class="hover:text-black">Lehengas</a>
+              <a href="#" class="hover:text-black">Bridal</a>
+              <a href="#" class="hover:text-black">Wedding</a>
+            @endif
           </nav>
         </div>
 
@@ -78,49 +84,62 @@
           
 
 
-          <!-- Profile with Dropdown -->
-          <div class="relative">
-            <button
-              id="profile-btn"
-              class="flex items-center gap-2 text-gray-700 hover:text-black"
-            >
-              <img
-                src="https://i.pravatar.cc/32"
-                alt="User"
-                class="w-8 h-8 rounded-full object-cover"
-              />
-              <span class="hidden sm:block text-sm">Anne Doe</span>
-              <i class="fa-solid fa-chevron-down text-xs hidden sm:block"></i>
-            </button>
+          <!-- Profile Section -->
+          @auth
+            <!-- Profile with Dropdown (Logged In) -->
+            <div class="relative">
+              <button
+                id="profile-btn"
+                class="flex items-center gap-2 text-gray-700 hover:text-black"
+              >
+                <img
+                  src="https://i.pravatar.cc/32"
+                  alt="User"
+                  class="w-8 h-8 rounded-full object-cover"
+                />
+                <span class="hidden sm:block text-sm">{{ Auth::user()->name }}</span>
+                <i class="fa-solid fa-chevron-down text-xs hidden sm:block"></i>
+              </button>
 
-            <!-- Account Dropdown -->
-            <div
-              id="account-dropdown"
-              class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 hidden z-50"
-            >
-              <a
-                href="#"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >My Profile</a
+              <!-- Account Dropdown -->
+              <div
+                id="account-dropdown"
+                class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 hidden z-50"
               >
-              <a
-                href="#"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >Orders</a
-              >
-              <a
-                href="#"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >Wishlist</a
-              >
-              <hr class="my-1" />
-              <a
-                href="#"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >Logout</a
-              >
+                <a
+                  href="#"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >My Profile</a
+                >
+                <a
+                  href="#"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >Orders</a
+                >
+                <a
+                  href="#"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >Wishlist</a
+                >
+                <hr class="my-1" />
+                <form method="POST" action="{{ route('logout') }}">
+                  @csrf
+                  <button
+                    type="submit"
+                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </form>
+              </div>
             </div>
-          </div>
+          @else
+            <!-- Login Button (Not Logged In) -->
+            <a href="{{ route('page.login') }}" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <i class="fa-solid fa-user text-sm"></i>
+              <span class="text-sm font-medium">Login</span>
+            </a>
+          @endauth
         </div>
       </div>
     </header>
@@ -157,10 +176,16 @@
       <!-- Mobile Navigation -->
       <nav class="p-6">
         <ul class="space-y-4 text-gray-700 font-medium">
-          <li><a href="#" class="block hover:text-black">Salwar Kameez</a></li>
-          <li><a href="#" class="block hover:text-black">Lehengas</a></li>
-          <li><a href="#" class="block hover:text-black">Bridal</a></li>
-          <li><a href="#" class="block hover:text-black">Wedding</a></li>
+          @if(isset($categories) && count($categories) > 0)
+            @foreach($categories as $category)
+              <li><a href="{{ route('category.show', $category->slug) }}" class="block hover:text-black">{{ $category->name }}</a></li>
+            @endforeach
+          @else
+            <li><a href="#" class="block hover:text-black">Salwar Kameez</a></li>
+            <li><a href="#" class="block hover:text-black">Lehengas</a></li>
+            <li><a href="#" class="block hover:text-black">Bridal</a></li>
+            <li><a href="#" class="block hover:text-black">Wedding</a></li>
+          @endif
         </ul>
       </nav>
     </div>

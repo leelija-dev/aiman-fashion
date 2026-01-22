@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use App\Models\Notification;
+use App\Models\Category;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -29,7 +30,8 @@ class AppServiceProvider extends ServiceProvider
         });
         View::composer('*', function ($view) {
         $notifications = Notification::where('viewed', 0)->latest()->get();
-        $view->with('notifications', $notifications);
+        $categories = Category::where('is_active', 1)->orderBy('name')->get();
+        $view->with('notifications', $notifications)->with('categories', $categories);
     });
    }
 }
