@@ -18,7 +18,7 @@ class HomeController extends Controller
         $data = Service::all();
         $products = DB::table('products')
             ->rightJoin('product_variants', 'products.id', '=', 'product_variants.product_id')
-            ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id') 
+            ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
             ->where('products.is_active', 1)
             ->select(
                 'products.*',
@@ -65,7 +65,7 @@ class HomeController extends Controller
 
         $products = DB::table('products')
             ->join('product_variants', 'products.id', '=', 'product_variants.product_id') // 👈 inner join
-            ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id') 
+            ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
             ->where('products.is_active', 1)
             ->select(
                 'products.*',
@@ -79,7 +79,30 @@ class HomeController extends Controller
             )
             ->get();
 
-            // dd($products);
+        // dd($products);
         return view('web.multi-product', compact('products'));
+    }
+
+    public function ShowSingleProduct($id)
+    {
+        $product = DB::table('products')
+            ->join('product_variants', 'products.id', '=', 'product_variants.product_id') // inner join
+            ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
+            ->where('products.is_active', 1)
+            ->where('products.id', $id)   // 👈 filter by product id
+            ->select(
+                'products.*',
+                'product_variants.id as variant_id',
+                'product_variants.size',
+                'product_variants.color',
+                'product_variants.price',
+                'product_variants.discount_price as price_after_discount',
+                'product_variants.stock',
+                'product_images.image as images'
+            )
+            ->get();
+
+            // dd($product);
+            return view('web.single-product', compact('product'));
     }
 }
