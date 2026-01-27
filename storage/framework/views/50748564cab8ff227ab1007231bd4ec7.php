@@ -105,7 +105,7 @@
 
             <!-- Right Link -->
             <a
-                href="#"
+                href="<?php echo e(route('page.multi-product')); ?>"
                 class="flex items-center gap-1 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-black hover:gap-2 transition-all">
                 All Products
                 <span aria-hidden="true">→</span>
@@ -121,7 +121,7 @@
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
                         <img
-                            src="./assets/images/Home-image/pic-18.avif"
+                            src="<?php echo e(asset('uploads/products/' . $product->image)); ?>"
                             alt="Silver Lehenga"
                             class="w-full h-[340px] object-cover object-top object-center" />
 
@@ -178,7 +178,7 @@
                         </div>
 
                         <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            <span class="text-lg font-bold text-gray-900">Rs. <?php echo e($product->discount_price); ?></span>
+                            <span class="text-lg font-bold text-gray-900">Rs. <?php echo e($product->price_after_discount); ?></span>
                             <span class="text-sm text-gray-400 line-through">Rs. <?php echo e($product->price); ?></span>
                         </div>
                         <div class="lgg:hidden block">
@@ -679,7 +679,7 @@
 
             <!-- Right Link -->
             <a
-                href="#"
+                href="<?php echo e(route('page.multi-product')); ?>"
                 class="flex items-center gap-1 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-black hover:gap-2 transition-all">
                 All Products
                 <span aria-hidden="true">→</span>
@@ -1025,15 +1025,13 @@
     <div class="container mx-auto">
         <div
             class="w-full py-4 flex items-center justify-between flex-wrap gap-4 mb-3">
-            <!-- Left Title -->
+           
             <h2
                 class="text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-gray-900">
                 Filled By Categories
             </h2>
 
-            <!-- Center Navigation -->
-
-            <!-- Right Link -->
+         
             <a
                 href="#"
                 class="flex items-center gap-1 text-p-lg lgg:text-p-lgg xl:text-p-xl 2xl:text-p-2xl font-semibold text-black hover:gap-2 transition-all">
@@ -1046,7 +1044,7 @@
             <div class="item flex justify-center items-center">
                 <div
                     class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                    <!-- Image Wrapper -->
+                   
                     <div class="relative rounded-xl overflow-hidden">
                         <img
                             src="./assets/images/Home-image/pic-18.avif"
