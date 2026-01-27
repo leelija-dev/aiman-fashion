@@ -29,7 +29,7 @@
     <link rel="shortcut icon" href="{{asset('web/images/amarmaa-logo.webp')}}" />
     <link rel="apple-touch-icon" sizes="180x180" href="{{asset('images/site-img/apple-touch-icon.png')}}" />
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+   
     @yield('styles')
 
     @stack('styles')
@@ -51,6 +51,8 @@
     <!-- build css -->
     <link rel="stylesheet" href="{{asset('build/assets/css/main.css')}}">
     <link rel="stylesheet" href="{{asset('build/assets/css/main2.css')}}">
+
+     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @if(isset($ogMeta))
     <x-blog.og-tags
