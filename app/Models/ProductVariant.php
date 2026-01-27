@@ -90,4 +90,9 @@ class ProductVariant extends Model
         
         return $this->product->name . ($parts ? ' - ' . implode(' / ', $parts) : '');
     }
+    public function images()
+{
+    return $this->hasMany(ProductImage::class, 'variant_id');
+}
+
 }

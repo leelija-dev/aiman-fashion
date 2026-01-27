@@ -5,7 +5,28 @@
 <?php echo e(config('app.name')); ?> - Add Product Variant
 <?php $__env->stopSection(); ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
+<style>
+    /* 3 images per row in Dropzone preview */
+#multiImageDropzone .dz-preview {
+    width: 30%;
+    margin: 1%;
+    display: inline-block;
+    vertical-align: top;
+}
 
+/* Responsive for mobile */
+@media (max-width: 768px) {
+    #multiImageDropzone .dz-preview {
+        width: 48%;
+    }
+}
+
+@media (max-width: 480px) {
+    #multiImageDropzone .dz-preview {
+        width: 100%;
+    }
+}
+</style>
 <?php $__env->startSection('content'); ?>
 <div class="container-fluid py-4">
     <div class="col-12">
@@ -20,7 +41,7 @@
 
                     </div>
                 <?php endif; ?>
-                <form action="<?php echo e(route('admin.product-variants.store')); ?>" method="POST">
+                <form action="<?php echo e(route('admin.product-variants.store')); ?>" method="POST" enctype="multipart/form-data" id="variantForm">
                     <?php echo csrf_field(); ?>
                     <div class="row">
                         <div class="col-md-6">
@@ -76,20 +97,11 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                             </div>
-                    <div class="form-group">
-                                        <label class="text-uppercase text-secondary">Upload Gallery Images</label>
-                                        <div id="multiImageDropzone" class="dropzone"></div>
-                                        <?php $__errorArgs = ['images'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                            <span class="invalid-feedback d-block"><?php echo e($message); ?></span>
-                                        <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                    </div>
+                                    <div class="mb-3">
+                                    <label class="text-uppercase text-secondary">Upload Gallery Images</label>
+                                    <div id="multiImageDropzone" class="dropzone border rounded"></div>
+                                </div>
+
 
                             
                         </div>
@@ -193,10 +205,14 @@ unset($__errorArgs, $__bag); ?>
     </div>
 </div>
 <?php $__env->stopSection(); ?>
+<?php $__env->startSection('styles'); ?>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
+
+<?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('scripts'); ?>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -264,6 +280,48 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+<script>
+Dropzone.autoDiscover = false;
+
+new Dropzone("#multiImageDropzone", {
+    url: "#",               // Not used
+    autoProcessQueue: false,
+    uploadMultiple: true,
+    parallelUploads: 10,
+    maxFiles: 10,
+    paramName: "images[]",
+    acceptedFiles: ".jpg,.jpeg,.png,.webp",
+    addRemoveLinks: true,
+
+    init: function () {
+        let myDropzone = this;
+
+        document.getElementById("variantForm").addEventListener("submit", function () {
+
+            // Append images into form manually
+            myDropzone.files.forEach(function (file) {
+
+                let hiddenInput = document.createElement('input');
+                hiddenInput.type = 'file';
+                hiddenInput.name = 'images[]';
+                hiddenInput.files = createFileList(file);
+
+                document.getElementById("variantForm").appendChild(hiddenInput);
+
+            });
+        });
+    }
+});
+
+// Helper function
+function createFileList(file) {
+    let dataTransfer = new DataTransfer();
+    dataTransfer.items.add(file);
+    return dataTransfer.files;
+}
+</script>
+
+
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('Admin.layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\project\aiman-royale\resources\views/Admin/product-variant/create.blade.php ENDPATH**/ ?>
