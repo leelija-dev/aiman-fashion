@@ -5,7 +5,74 @@
 @section('title')
 {{ config('app.name') }} - Product Variants
 @endsection
+@section('styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
 
+@endsection
+<style>
+ /* Dropzone container */
+.dropzone {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 10px;
+}
+
+/* Each preview box */
+.dropzone .dz-preview {
+    width: calc(33.333% - 12px) !important; /* 3 per row */
+    margin: 0 !important;
+    position: relative;
+}
+
+/* Thumbnail image */
+.dropzone .dz-image {
+    width: 100%;
+    height: 140px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.dropzone .dz-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* File name */
+.dropzone .dz-details {
+    text-align: center;
+    font-size: 12px;
+}
+
+/* Remove button style */
+.dropzone .dz-remove {
+    display: block;
+    text-align: center;
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Success / Error icons positioning */
+.dropzone .dz-success-mark,
+.dropzone .dz-error-mark {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+}
+
+/* Hide big default icons */
+.dropzone .dz-progress {
+    display: none;
+}
+/* Hide dropzone message when files exist */
+.dropzone.dz-started .dz-message {
+    display: none !important;
+}
+
+
+</style>
 @section('content')
 <div class="container-fluid py-4">
     <div class="col-12">
@@ -178,7 +245,7 @@
                                         </div>
                                         <form id="editForm{{ $variant->id }}"
                                               action="{{ route('admin.product-variants.update', $variant->id) }}"
-                                              method="POST">
+                                              method="POST" enctype="multipart/form-data">
                                             @csrf
                                             @method('PUT')
                                             <div class="modal-body text-start">
@@ -205,6 +272,15 @@
                                                             <input type="number" class="form-control" id="edit_price_{{ $variant->id }}" name="price" 
                                                                    value="{{ $variant->price }}" step="0.01" min="0" required>
                                                         </div>
+                                                        <div class="col-12 mt-2">
+                                                            <label class="form-label">Variant Images</label>
+
+                                                            <div id="dropzone-{{ $variant->id }}" 
+                                                                class="dropzone border rounded p-2">
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" name="removed_images" id="removed_images_{{ $variant->id }}">
+
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="mb-3">
@@ -318,6 +394,11 @@
     </div>
 </div>
 @endsection
+@section('styles')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
+
+@endsection
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
 
 @section('scripts')
 <script>
@@ -396,4 +477,94 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+<script>
+Dropzone.autoDiscover = false;
+
+@foreach($data as $variant)
+
+let existingImages{{ $variant->id }} = @json($variant->images);
+let removedImages{{ $variant->id }} = [];
+
+let dz{{ $variant->id }} = new Dropzone("#dropzone-{{ $variant->id }}", {
+
+    url: "#",
+    autoProcessQueue: false,
+    maxFiles: 10,
+    paramName: "images[]",
+    acceptedFiles: ".jpg,.jpeg,.png,.webp",
+    addRemoveLinks: true,
+
+    init: function () {
+
+        let dz = this;
+
+        // PRELOAD OLD IMAGES
+        existingImages{{ $variant->id }}.forEach(function(image){
+
+            let mockFile = {
+                name: image.image,
+                size: 12345,
+                serverId: image.id
+            };
+
+            dz.emit("addedfile", mockFile);
+            dz.emit("thumbnail", mockFile,
+                "{{ asset('uploads/variants') }}/" + image.image
+            );
+            dz.emit("complete", mockFile);
+
+            dz.files.push(mockFile);
+            dz.element.classList.add("dz-started");
+        });
+
+        // TRACK REMOVED IMAGES
+        dz.on("removedfile", function(file){
+
+            if(file.serverId){
+                removedImages{{ $variant->id }}.push(file.serverId);
+            }
+
+            if(dz.files.length === 0){
+                dz.element.classList.remove("dz-started");
+            }
+
+        });
+
+    }
+});
+
+
+// FORM SUBMIT FIX
+document.getElementById("editForm{{ $variant->id }}")
+.addEventListener("submit", function(){
+
+    // STORE REMOVED IDS
+    document.getElementById("removed_images_{{ $variant->id }}").value =
+        removedImages{{ $variant->id }}.join(',');
+
+    // APPEND NEW FILES TO FORM
+    dz{{ $variant->id }}.files.forEach(function(file){
+
+        if(!file.serverId){ // only NEW files
+
+            let input = document.createElement("input");
+            input.type = "file";
+            input.name = "images[]";
+
+            let dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            input.files = dataTransfer.files;
+
+            document.getElementById("editForm{{ $variant->id }}")
+                .appendChild(input);
+        }
+
+    });
+
+});
+
+@endforeach
+</script>
+
+
 @endsection

@@ -9,6 +9,9 @@ use App\Models\Color;
 use App\Models\Size;
 use App\Models\StockIn;
 use Illuminate\Http\Request;
+use App\Models\ProductImage;
+use Illuminate\Support\Facades\File;
+
 
 class ProductVariantController extends Controller
 {
@@ -17,7 +20,7 @@ class ProductVariantController extends Controller
      */
     public function index(Request $request)
     {
-        $query = ProductVariant::with(['product', 'colorModel', 'sizeModel']);
+        $query = ProductVariant::with(['product', 'colorModel', 'sizeModel','images']);
 
         if ($request->filled('search')) {
             $search = $request->input('search');
@@ -77,6 +80,7 @@ class ProductVariantController extends Controller
             'price' => 'required|numeric|min:0',
             'discount_price' => 'nullable|numeric|min:0|lt:price',
             'stock' => 'required|integer|min:0',
+            // 'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
         ], [
             'product_id.unique_combination' => 'This product already has a variant with the same size and color combination.',
         ]);
@@ -94,7 +98,23 @@ class ProductVariantController extends Controller
         }
 
         $variant = ProductVariant::create($data);
+        if($variant){
+                    if ($request->hasFile('images')) {
 
+            foreach ($request->file('images') as $image) {
+
+                $filename = time().rand(100,999).'.'.$image->getClientOriginalExtension();
+
+                $image->move(public_path('uploads/variants'), $filename);
+                // dd($variant->id);
+                ProductImage::create([
+                    'product_id' => $variant->product_id,
+                    'variant_id' => $variant->id,
+                    'image' => $filename
+                ]);
+            }
+            }
+        }
         // Create stock entry for the new variant
         StockIn::create([
             'product_variant_id' => $variant->id,
@@ -155,6 +175,43 @@ class ProductVariantController extends Controller
             'color'           => $request->color,
             'size'            => $request->size,
         ]);
+    //if removed images
+        if ($request->removed_images) {
+
+        $removedIds = explode(',', $request->removed_images);
+
+        foreach ($removedIds as $id) {
+
+            $image = ProductImage::find($id);
+
+            if ($image) {
+
+                $path = public_path('uploads/variants/' . $image->image);
+
+                if (File::exists($path)) {
+                    File::delete($path);
+                }
+
+                $image->delete();
+            }
+        }
+    }
+    //store images
+    if ($request->hasFile('images')) {
+
+       foreach ($request->file('images') as $image) {
+
+        $filename = time().rand(100,999).'.'.$image->getClientOriginalExtension();
+
+            $image->move(public_path('uploads/variants'), $filename);
+
+            ProductImage::create([
+                'product_id' => $request->product_id,
+                'variant_id' => $productVariant->id,
+                'image' => $filename
+            ]);
+        }
+    }
 
 
         // Note: Stock is managed separately through Stock Management
