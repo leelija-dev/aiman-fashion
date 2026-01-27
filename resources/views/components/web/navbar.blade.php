@@ -1,3 +1,38 @@
+  <style>
+    /* Fix z-index stacking */
+
+
+#categories-wrapper-menu {
+    display: none; /* Start hidden */
+    position: fixed;
+    z-index: 20004;
+    top: 80px; /* Adjust based on your header height */
+    left: 0;
+    right: 0;
+}
+
+nav a {
+    position: relative;
+    cursor: pointer;
+}
+
+/* Optional: Add animation for smoother appearance */
+#categories-wrapper-menu {
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+  </style>
+  
   <header
     id="nav-wrapper"
     class="bg-white shadow-sm sticky top-0 lg:z-[20004] z-[20000] px-3">
@@ -177,7 +212,7 @@
 
 
 
-  <div class="fixed lg:z-[20004] z-[20000] w-full mx-auto lg:block  hidden top-[80px]">
+  <div id="categories-wrapper-menu" class="fixed lg:z-[20004] z-[20000] w-full mx-auto lg:block  hidden top-[80px]">
     <div class="max-w-[calc(100%-50px)] mx-auto my-10 shadow-lg rounded-xl overflow-hidden bg-white  ">
       <div class="flex">
 
@@ -199,7 +234,7 @@
         <!--  Product Section -->
         <div class="flex-1  bg-[url('https://www.transparenttextures.com/patterns/geometry.png')] bg-opacity-20 py-8 pl-8 pr-4">
 
-          <div id="occation-products" class="flex flex-col gap-2   pr-4">
+          <div id="style-products" class="flex flex-col gap-2   pr-4">
             <div class="flex flex-row justify-between gap-3 items-start">
 
 
@@ -498,3 +533,182 @@
     </div>
 
   </div>
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Get elements
+    const navLinks = document.querySelectorAll('nav a');
+    const categoriesMenu = document.getElementById('categories-wrapper-menu');
+    const styleProducts = document.getElementById('style-products');
+    const occasionProducts = document.getElementById('occation-products');
+    const collectionProducts = document.getElementById('collection-products');
+    const sidebarButtons = document.querySelectorAll('.bg-\\[\\#fdebdc\\] button');
+    
+    // Check if elements exist
+    if (!categoriesMenu || !styleProducts || !occasionProducts || !collectionProducts) {
+        console.error('Required elements not found');
+        return;
+    }
+    
+    // Variables for hover timeout management
+    let menuTimeout;
+    let linkTimeout;
+    const HOVER_DELAY = 150; // milliseconds delay for hover
+    
+    // Track if mouse is over menu
+    let isOverMenu = false;
+    let isOverNav = false;
+    
+    // Function to show the categories menu
+    function showCategoriesMenu() {
+        clearTimeout(menuTimeout);
+        categoriesMenu.style.display = 'block';
+        isOverMenu = true;
+    }
+    
+    // Function to hide the categories menu
+    function hideCategoriesMenu() {
+        isOverMenu = false;
+        menuTimeout = setTimeout(() => {
+            if (!isOverNav && !isOverMenu) {
+                categoriesMenu.style.display = 'none';
+                // Reset all product sections to default (show style)
+                resetProductSections();
+            }
+        }, HOVER_DELAY);
+    }
+    
+    // Function to reset product sections to default (show style)
+    function resetProductSections() {
+        if (styleProducts) styleProducts.classList.remove('hidden');
+        if (occasionProducts) occasionProducts.classList.add('hidden');
+        if (collectionProducts) collectionProducts.classList.add('hidden');
+        
+        // Reset sidebar button styles
+        if (sidebarButtons && sidebarButtons.length > 0) {
+            sidebarButtons.forEach(button => {
+                button.classList.remove('bg-white');
+                button.classList.add('bg-[#fdebdc]');
+            });
+            sidebarButtons[0].classList.remove('bg-[#fdebdc]');
+            sidebarButtons[0].classList.add('bg-white');
+        }
+    }
+    
+    // Function to switch product sections
+    function switchProductSection(sectionToShow) {
+        // Hide all sections
+        if (styleProducts) styleProducts.classList.add('hidden');
+        if (occasionProducts) occasionProducts.classList.add('hidden');
+        if (collectionProducts) collectionProducts.classList.add('hidden');
+        
+        // Show the requested section
+        if (sectionToShow) sectionToShow.classList.remove('hidden');
+    }
+    
+    // Add hover event listeners to desktop nav links
+    navLinks.forEach(link => {
+        link.addEventListener('mouseenter', function(e) {
+            clearTimeout(linkTimeout);
+            isOverNav = true;
+            showCategoriesMenu();
+        });
+        
+        link.addEventListener('mouseleave', function(e) {
+            isOverNav = false;
+            linkTimeout = setTimeout(() => {
+                if (!isOverMenu) {
+                    hideCategoriesMenu();
+                }
+            }, HOVER_DELAY);
+        });
+    });
+    
+    // Add hover event listeners to categories menu
+    if (categoriesMenu) {
+        categoriesMenu.addEventListener('mouseenter', function() {
+            clearTimeout(menuTimeout);
+            isOverMenu = true;
+        });
+        
+        categoriesMenu.addEventListener('mouseleave', function() {
+            isOverMenu = false;
+            hideCategoriesMenu();
+        });
+    }
+    
+    // Add hover event listeners to sidebar buttons
+    if (sidebarButtons && sidebarButtons.length > 0) {
+        sidebarButtons.forEach((button, index) => {
+            button.addEventListener('mouseenter', function() {
+                // Update button styles
+                sidebarButtons.forEach(btn => {
+                    btn.classList.remove('bg-white');
+                    btn.classList.add('bg-[#fdebdc]');
+                });
+                this.classList.remove('bg-[#fdebdc]');
+                this.classList.add('bg-white');
+                
+                // Switch to corresponding product section
+                switch(index) {
+                    case 0:
+                        switchProductSection(styleProducts);
+                        break;
+                    case 1:
+                        switchProductSection(occasionProducts);
+                        break;
+                    case 2:
+                        switchProductSection(collectionProducts);
+                        break;
+                    default:
+                        switchProductSection(styleProducts);
+                }
+            });
+        });
+    }
+    
+    // Initialize with style section visible by default
+    resetProductSections();
+    
+    // Add click event listener to close menu when clicking outside
+    document.addEventListener('click', function(event) {
+        const isClickInsideMenu = categoriesMenu.contains(event.target);
+        const isClickOnNavLink = Array.from(navLinks).some(link => link.contains(event.target));
+        
+        if (!isClickInsideMenu && !isClickOnNavLink && categoriesMenu.style.display === 'block') {
+            categoriesMenu.style.display = 'none';
+            resetProductSections();
+        }
+    });
+    
+    // Mobile menu functionality (already in your code, but ensure it doesn't interfere)
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileSidebar = document.getElementById('mobile-sidebar');
+    const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    
+    if (mobileMenuBtn && mobileSidebar) {
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileSidebar.classList.remove('-translate-x-full');
+            if (sidebarOverlay) sidebarOverlay.classList.remove('hidden');
+        });
+    }
+    
+    if (closeSidebarBtn && mobileSidebar) {
+        closeSidebarBtn.addEventListener('click', function() {
+            mobileSidebar.classList.add('-translate-x-full');
+            if (sidebarOverlay) sidebarOverlay.classList.add('hidden');
+        });
+    }
+    
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', function() {
+            mobileSidebar.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        });
+    }
+});
+  </script>
+  
