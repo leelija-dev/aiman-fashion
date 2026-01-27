@@ -44,6 +44,8 @@ pipeline {
                             docker compose build --pull
                             docker compose up -d
 
+                            docker compose exec -T app chown -R deploy:deploy storage bootstrap/cache
+
                             echo "[DEPLOY] Waiting for services..."
                             sleep 30
 
