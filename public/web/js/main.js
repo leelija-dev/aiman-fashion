@@ -159,3 +159,7 @@ profileBtn.addEventListener("click", (e) => {
 document.addEventListener("click", () => {
   dropdown.classList.add("hidden");
 });
+
+
+
+

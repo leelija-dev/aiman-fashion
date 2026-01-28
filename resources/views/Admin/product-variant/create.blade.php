@@ -6,7 +6,28 @@
 {{ config('app.name') }} - Add Product Variant
 @endsection
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
+<style>
+    /* 3 images per row in Dropzone preview */
+#multiImageDropzone .dz-preview {
+    width: 30%;
+    margin: 1%;
+    display: inline-block;
+    vertical-align: top;
+}
 
+/* Responsive for mobile */
+@media (max-width: 768px) {
+    #multiImageDropzone .dz-preview {
+        width: 48%;
+    }
+}
+
+@media (max-width: 480px) {
+    #multiImageDropzone .dz-preview {
+        width: 100%;
+    }
+}
+</style>
 @section('content')
 <div class="container-fluid py-4">
     <div class="col-12">
@@ -20,7 +41,7 @@
                         {{ $errors->first('unique_combination') }}
                     </div>
                 @endif
-                <form action="{{ route('admin.product-variants.store') }}" method="POST">
+                <form action="{{ route('admin.product-variants.store') }}" method="POST" enctype="multipart/form-data" id="variantForm">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
@@ -54,13 +75,11 @@
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
                             </div>
-                    <div class="form-group">
-                                        <label class="text-uppercase text-secondary">Upload Gallery Images</label>
-                                        <div id="multiImageDropzone" class="dropzone"></div>
-                                        @error('images')
-                                            <span class="invalid-feedback d-block">{{ $message }}</span>
-                                        @enderror
-                                    </div>
+                                    <div class="mb-3">
+                                    <label class="text-uppercase text-secondary">Upload Gallery Images</label>
+                                    <div id="multiImageDropzone" class="dropzone border rounded"></div>
+                                </div>
+
 
                             
                         </div>
@@ -134,9 +153,13 @@
     </div>
 </div>
 @endsection
+@section('styles')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
+
+@endsection
 
 @section('scripts')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
 
         <script>
@@ -205,4 +228,46 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+<script>
+Dropzone.autoDiscover = false;
+
+new Dropzone("#multiImageDropzone", {
+    url: "#",               // Not used
+    autoProcessQueue: false,
+    uploadMultiple: true,
+    parallelUploads: 10,
+    maxFiles: 10,
+    paramName: "images[]",
+    acceptedFiles: ".jpg,.jpeg,.png,.webp",
+    addRemoveLinks: true,
+
+    init: function () {
+        let myDropzone = this;
+
+        document.getElementById("variantForm").addEventListener("submit", function () {
+
+            // Append images into form manually
+            myDropzone.files.forEach(function (file) {
+
+                let hiddenInput = document.createElement('input');
+                hiddenInput.type = 'file';
+                hiddenInput.name = 'images[]';
+                hiddenInput.files = createFileList(file);
+
+                document.getElementById("variantForm").appendChild(hiddenInput);
+
+            });
+        });
+    }
+});
+
+// Helper function
+function createFileList(file) {
+    let dataTransfer = new DataTransfer();
+    dataTransfer.items.add(file);
+    return dataTransfer.files;
+}
+</script>
+
+
 @endsection
