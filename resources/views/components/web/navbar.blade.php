@@ -238,34 +238,39 @@ nav a {
           <div id="style-products" class="flex flex-col gap-2   pr-4">
             <div class="flex flex-row justify-between gap-3 items-start">
 
-
-
               <div class="w-full flex flex-row  gap-4">
                 <div>
                   <ul class="px-0 ">
-                    <li class="mb-1 text-[1.5rem] ">Red Saree</li>
-                    <li class="mb-1 text-[1.5rem] ">Red Saree</li>
-                    <li class="mb-1 text-[1.5rem] ">Red Saree</li>
-                    <li class="mb-1 text-[1.5rem] ">Red Saree</li>
-                    <li class="mb-1 text-[1.5rem] ">Red Saree</li>
+                    @if(isset($categories) && count($categories) > 0)
+                      @foreach($categories->take(5) as $category)
+                        <li class="mb-1 text-[1.5rem] "><a href="{{ route('category.show', $category->slug) }}" class="hover:text-black">{{ $category->name }}</a></li>
+                      @endforeach
+                    @else
+                      <li class="mb-1 text-[1.5rem] ">Salwar Kameez</li>
+                      <li class="mb-1 text-[1.5rem] ">Lehengas</li>
+                      <li class="mb-1 text-[1.5rem] ">Bridal</li>
+                      <li class="mb-1 text-[1.5rem] ">Wedding</li>
+                      <li class="mb-1 text-[1.5rem] ">Sarees</li>
+                    @endif
                   </ul>
 
                 </div>
                 <div>
                   <ul class="px-0 ">
-                    <li class="mb-1 text-[1.5rem] ">Red Saree</li>
-                    <li class="mb-1 text-[1.5rem] ">Red Saree</li>
-                    <li class="mb-1 text-[1.5rem] ">Red Saree</li>
-                    <li class="mb-1 text-[1.5rem] ">Red Saree</li>
-                    <li class="mb-1 text-[1.5rem] ">Red Saree</li>
+                    @if(isset($categories) && count($categories) > 5)
+                      @foreach($categories->skip(5)->take(5) as $category)
+                        <li class="mb-1 text-[1.5rem] "><a href="{{ route('category.show', $category->slug) }}" class="hover:text-black">{{ $category->name }}</a></li>
+                      @endforeach
+                    @else
+                      <li class="mb-1 text-[1.5rem] ">Kurtis</li>
+                      <li class="mb-1 text-[1.5rem] ">Gowns</li>
+                      <li class="mb-1 text-[1.5rem] ">Anarkali</li>
+                      <li class="mb-1 text-[1.5rem] ">Indo Western</li>
+                      <li class="mb-1 text-[1.5rem] ">Party Wear</li>
+                    @endif
                   </ul>
 
                 </div>
-
-
-
-
-
               </div>
               <div class="xl:max-w-[300px] lg:max-w-[270px] flex flex-col gap-2">
                 <div class="overflow-hidden rounded-md  max-h-[500px] w-full relative">
@@ -291,57 +296,61 @@ nav a {
 
 
               <div class="w-full xll:grid-cols-4  xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid gap-3">
-                <div class="">
-                  <div class="overflow-hidden rounded-md ">
-                    <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
+                @if(isset($categories) && count($categories) > 0)
+                  @foreach($categories->take(4) as $category)
+                  <div class="">
+                    <div class="overflow-hidden rounded-md ">
+                      <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
 
+                    </div>
+
+                    <p class="xl:text-[22px] lg:text-xl md:text-lg text-md  text-gray-700 mt-2 text-center">
+                      <a href="{{ route('category.show', $category->slug) }}" class="hover:text-black">{{ $category->name }}</a>
+                    </p>
                   </div>
+                  @endforeach
+                @else
+                  <div class="">
+                    <div class="overflow-hidden rounded-md ">
+                      <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
 
-                  <p class="xl:text-[22px] lg:text-xl md:text-lg text-md  text-gray-700 mt-2 text-center">
-                    Red Saree
-                  </p>
+                    </div>
 
-
-                </div>
-                <div class="">
-                  <div class="overflow-hidden rounded-md ">
-                    <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
-
+                    <p class="xl:text-[22px] lg:text-xl md:text-lg text-md  text-gray-700 mt-2 text-center">
+                      Salwar Kameez
+                    </p>
                   </div>
+                  <div class="">
+                    <div class="overflow-hidden rounded-md ">
+                      <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
 
-                  <p class="xl:text-[22px] lg:text-xl md:text-lg text-md  text-gray-700 mt-2 text-center">
-                    Red Saree
-                  </p>
+                    </div>
 
-
-                </div>
-                <div class="">
-                  <div class="overflow-hidden rounded-md ">
-                    <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
-
+                    <p class="xl:text-[22px] lg:text-xl md:text-lg text-md  text-gray-700 mt-2 text-center">
+                      Lehengas
+                    </p>
                   </div>
+                  <div class="">
+                    <div class="overflow-hidden rounded-md ">
+                      <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
 
-                  <p class="xl:text-[22px] lg:text-xl md:text-lg text-md  text-gray-700 mt-2 text-center">
-                    Red Saree
-                  </p>
+                    </div>
 
-
-                </div>
-                <div class="">
-                  <div class="overflow-hidden rounded-md ">
-                    <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
-
+                    <p class="xl:text-[22px] lg:text-xl md:text-lg text-md  text-gray-700 mt-2 text-center">
+                      Bridal
+                    </p>
                   </div>
+                  <div class="">
+                    <div class="overflow-hidden rounded-md ">
+                      <img class="w-full h-full object-cover aspect-auto" src="{{asset('web/images/banner-images/red-plazo-6.webp')}}" alt="">
 
-                  <p class="xl:text-[22px] lg:text-xl md:text-lg text-md  text-gray-700 mt-2 text-center">
-                    Red Saree
-                  </p>
+                    </div>
 
-
-                </div>
-
-
-
+                    <p class="xl:text-[22px] lg:text-xl md:text-lg text-md  text-gray-700 mt-2 text-center">
+                      Wedding
+                    </p>
+                  </div>
+                @endif
               </div>
               <div class="xl:max-w-[300px] lg:max-w-[270px] flex flex-col gap-2">
                 <div class="overflow-hidden rounded-md  max-h-[500px] w-full">
