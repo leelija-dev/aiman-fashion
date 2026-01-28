@@ -15,7 +15,7 @@
                 <div class="h-full w-full">
                     <img
                         class="object-cover h-full w-full object-top object-center"
-                        src="./assets/images/Home-image/pic-16.avif"
+                 src="{{asset('web/images/banner-images/light-pink-salwar-m-1.webp')}}"
                         alt="" />
                 </div>
             </div>
@@ -26,7 +26,7 @@
                     class="w-full xll:h-[300px] h-[250px] overflow-hidden flex-shrink-0">
                     <img
                         class="object-cover h-full w-full object-top object-center"
-                        src="./assets/images/Home-image/pic-2.avif"
+                        src="{{asset('web/images/banner-images/glow-pink-m-1.webp')}}"
                         alt="" />
                 </div>
 
@@ -52,7 +52,7 @@
                     class="w-full xll:h-[300px] h-[250px] overflow-hidden flex-shrink-0">
                     <img
                         class="object-cover h-full w-full object-top object-center"
-                        src="./assets/images/Home-image/pic-3.avif"
+                        src="{{asset('web/images/banner-images/gray-lahenga-2.webp')}}"
                         alt="" />
                 </div>
             </div>
@@ -61,7 +61,7 @@
                 <div class="h-full w-full">
                     <img
                         class="object-cover h-full w-full object-top object-center"
-                        src="./assets/images/Home-image/pic-4.avif"
+                        src="{{asset('web/images/banner-images/red-plazo-6.webp')}}"
                         alt="" />
                 </div>
             </div>
@@ -120,17 +120,22 @@
         </div>
 
         <div class="main-owl owl-carousel owl-theme">
-            @foreach($products as $product):
-              
-            <div class="item flex justify-center items-center">
-                <div
-                    class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                    <!-- Image Wrapper -->
-                    <div class="relative rounded-xl overflow-hidden">
-                        <img
-                            src="{{ $product->images->first() ? asset('uploads/products/' . $product->images->first()->image) : asset('assets/images/placeholder.jpg') }}"
-                            alt="{{ $product->name }}"
-                            class="w-full h-[340px] object-cover object-top object-center" />
+            @if($products && $products->count() > 0)
+                @foreach($products as $product)
+                    @php
+                        $firstVariant = $product->variants->first();
+                        $firstImage = $product->images->first();
+                    @endphp
+                    
+                    <div class="item flex justify-center items-center">
+                        <div
+                            class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                            <!-- Image Wrapper -->
+                            <div class="relative rounded-xl overflow-hidden">
+                                <img
+                                    src="{{ $firstImage ? asset('uploads/products/' . $firstImage->image) : asset('assets/images/placeholder.jpg') }}"
+                                    alt="{{ $product->name }}"
+                                    class="w-full h-[340px] object-cover object-top object-center" />
 
                         <!-- Badges -->
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
@@ -164,7 +169,7 @@
                         <!-- Add To Cart (Hidden → Hover Show) -->
                         <div
                             class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart({{ $product->variants->first() ? $product->variants->first()->id : 1 }}, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
+                            <button onclick="addToCart(1, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
                                 Add To Cart
                             </button>
                         </div>
@@ -173,35 +178,39 @@
                     <!-- Content -->
                     <div class="p-4 space-y-1">
                         <h3 class="text-[15px] font-semibold text-gray-900">
-                            {{ $product->name }}{{ $product->variants->first() ? ', ' . $product->variants->first()->size . ', ' . $product->variants->first()->color : '' }}
+                            {{ $product->name }}{{ $firstVariant ? ', ' . $firstVariant->size . ', ' . $firstVariant->color : '' }}
                         </h3>
 
                         <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>{{ $product->brand }}</span>
+                            <span>{{ $product->brand ?? 'Brand Name' }}</span>
                             <span class="flex items-center gap-1 text-gray-700">
                                 <span class="text-sm font-medium">4.4</span>
                             </span>
                         </div>
 
                         <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            @if($product->variants->first())
-                                <span class="text-lg font-bold text-gray-900">Rs. {{ $product->variants->first()->discount_price ?? $product->variants->first()->price }}</span>
-                                @if($product->variants->first()->discount_price)
-                                    <span class="text-sm text-gray-400 line-through">Rs. {{ $product->variants->first()->price }}</span>
+                            @if($firstVariant)
+                                <span class="text-lg font-bold text-gray-900">Rs. {{ $firstVariant->discount_price ?? $firstVariant->price }}</span>
+                                @if($firstVariant->discount_price)
+                                    <span class="text-sm text-gray-400 line-through">Rs. {{ $firstVariant->price }}</span>
                                 @endif
                             @else
                                 <span class="text-lg font-bold text-gray-900">Rs. 0</span>
                             @endif
                         </div>
                         <div class="lgg:hidden block">
-                            <button onclick="addToCart({{ $product->variants->first() ? $product->variants->first()->id : 1 }}, event)" class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
+                            <button onclick="addToCart(1, event)" class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
                         </div>
                     </div>
                 </div>
             </div>
             @endforeach
-
-            <!-- Add more product items as needed -->
+            @else
+                <div class="text-center py-12">
+                    <p class="text-gray-500 text-lg">No products available at the moment.</p>
+                    <p class="text-gray-400 text-sm mt-2">Check back later for new arrivals!</p>
+                </div>
+            @endif
         </div>
     </div>
 </section>
@@ -255,7 +264,7 @@
                 <div class="absolute top-0 left-0 w-full h-full">
                     <img
                         class="w-full h-full object-cover object-center object-top"
-                        src="./assets/images/Home-image/pic-17.avif"
+                        src="{{asset('web/images/product-images/gray-lahenga-3_40_11zon.webp')}}"
                         alt="" />
                 </div>
                 <div
@@ -284,7 +293,7 @@
                 <div class="absolute top-0 left-0 w-full h-full">
                     <img
                         class="w-full h-full object-cover object-center object-top"
-                        src="./assets/images/Home-image/pic-18.avif"
+                         src="{{asset('web/images/product-images/light-pink-plazo-5_57_11zon.webp')}}"
                         alt="" />
                 </div>
                 <div
@@ -306,7 +315,7 @@
                 <div class="absolute top-0 left-0 w-full h-full">
                     <img
                         class="w-full h-full object-cover object-center object-top"
-                        src="./assets/images/Home-image/pic-19.avif"
+                       src="{{asset('web/images/product-images/pink-plazo-1_76_11zon.webp')}}"
                         alt="" />
                 </div>
                 <div
@@ -334,7 +343,7 @@
                 <div class="absolute top-0 left-0 w-full h-full">
                     <img
                         class="w-full h-full object-cover object-center object-top"
-                        src="./assets/images/Home-image/pic-20.avif"
+                         src="{{asset('web/images/product-images/red-plazo-9_95_11zon.webp')}}"
                         alt="" />
                 </div>
                 <div
@@ -612,7 +621,7 @@
                 class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
                 <img
                     class="min-w-12 w-12 h-12 min-h-12"
-                    src="./assets/images/icon1.svg"
+                     src="{{asset('web/images/icons/icon1.svg')}}"
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
@@ -629,7 +638,7 @@
                 class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
                 <img
                     class="min-w-12 w-12 h-12 min-h-12"
-                    src="./assets/images/icon2.svg"
+                    src="{{asset('web/images/icons/icon2.svg')}}"
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
@@ -646,7 +655,7 @@
                 class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
                 <img
                     class="min-w-12 w-12 h-12 min-h-12"
-                    src="./assets/images/icon4.svg"
+                    src="{{asset('web/images/icons/icon4.svg')}}"
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
@@ -663,7 +672,7 @@
                 class="flex justify-center sm:flex-row flex-col sm:text-left text-center items-center gap-4">
                 <img
                     class="min-w-12 w-12 h-12 min-h-12"
-                    src="./assets/images/icon3.svg"
+                    src="{{asset('web/images/icons/icon3.svg')}}"
                     alt="" />
                 <div>
                     <h3 class="font-semibold xl:text-[1.5rem] text-[1.3rem]">
@@ -699,26 +708,32 @@
         </div>
 
         <div class="main-owl owl-carousel owl-theme">
+
+        @foreach($products as $product):
             <div class="item flex justify-center items-center">
                 <div
-                    class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                    class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer product-card" data-product-id="{{ $product->id }}">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
                         <img
-                            src="./assets/images/Home-image/pic-4.avif"
-                            alt="Silver Lehenga"
+                            src="{{ asset('uploads/products/' . $product->image) }}"
+                            alt="{{ $product->name }}"
                             class="w-full h-[340px] object-cover object-top object-center" />
 
                         <!-- Badges -->
                         <div class="absolute top-3 left-3 flex flex-col gap-2">
-                            <span
-                                class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                                Trending
-                            </span>
-                            <span
-                                class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                -17%
-                            </span>
+                            @if($product->is_trending ?? false)
+                                <span
+                                    class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
+                                    Trending
+                                </span>
+                            @endif
+                            @if($product->price_after_discount && $product->price_after_discount != $product->price)
+                                <span
+                                    class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
+                                    -{{ round((($product->price - $product->price_after_discount) / $product->price) * 100) }}%
+                                </span>
+                            @endif
                         </div>
 
                         <!-- Wishlist Heart Icon (Top Right) -->
@@ -750,239 +765,33 @@
                     <!-- Content -->
                     <div class="p-4 space-y-1">
                         <h3 class="text-[15px] font-semibold text-gray-900">
-                            Womens Denim Jacket
+                            {{ $product->name }}{{ $firstVariant ? ', ' . $firstVariant->size . ', ' . $firstVariant->color : '' }}
                         </h3>
 
                         <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>Brand Name</span>
+                            <span>{{ $product->brand ?? 'Brand Name' }}</span>
                             <span class="flex items-center gap-1 text-gray-700">
-                                <span class="text-sm font-medium">4.4</span>
+                                <span class="text-sm font-medium">{{ $product->rating ?? '4.4' }}</span>
                             </span>
                         </div>
 
                         <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                            <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
+                            @if($firstVariant)
+                                <span class="text-lg font-bold text-gray-900">Rs. {{ $firstVariant->discount_price ?? $firstVariant->price }}</span>
+                                @if($firstVariant->discount_price)
+                                    <span class="text-sm text-gray-400 line-through">Rs. {{ $firstVariant->price }}</span>
+                                @endif
+                            @else
+                                <span class="text-lg font-bold text-gray-900">Rs. 0</span>
+                            @endif
                         </div>
                         <div class="lgg:hidden block">
-                            <button class=" px-4 py-1 bg-white border-secondary border-[1px] rounded-md  w-full">Add</button>
+                            <button onclick="addToCart({{ $firstVariant ? $firstVariant->id : 1 }}, event)" class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="item flex justify-center items-center">
-                <div
-                    class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                    <!-- Image Wrapper -->
-                    <div class="relative rounded-xl overflow-hidden">
-                        <img
-                            src="./assets/images/Home-image/pic-5.avif"
-                            alt="Silver Lehenga"
-                            class="w-full h-[340px] object-cover object-top object-center" />
-
-                        <!-- Badges -->
-                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                            <span
-                                class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                                Trending
-                            </span>
-                            <span
-                                class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                -17%
-                            </span>
-                        </div>
-
-                        <!-- Wishlist Heart Icon (Top Right) -->
-                        <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                class="w-5 h-5 text-red-500">
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button>
-
-                        <!-- Add To Cart (Hidden → Hover Show) -->
-                        <div
-                            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart(1, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                                Add To Cart
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Content -->
-                    <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">
-                            Womens Denim Jacket
-                        </h3>
-
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>Brand Name</span>
-                            <span class="flex items-center gap-1 text-gray-700">
-                                <span class="text-sm font-medium">4.4</span>
-                            </span>
-                        </div>
-
-                        <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                            <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                        </div>
-                        <div class="lgg:hidden block">
-                            <button class=" px-4 py-1 bg-white border-secondary border-[1px] rounded-md  w-full">Add</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="item flex justify-center items-center">
-                <div
-                    class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                    <!-- Image Wrapper -->
-                    <div class="relative rounded-xl overflow-hidden">
-                        <img
-                            src="./assets/images/Home-image/pic-6.avif"
-                            alt="Silver Lehenga"
-                            class="w-full h-[340px] object-cover object-top object-center" />
-
-                        <!-- Badges -->
-                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                            <span
-                                class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                                Trending
-                            </span>
-                            <span
-                                class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                -17%
-                            </span>
-                        </div>
-
-                        <!-- Wishlist Heart Icon (Top Right) -->
-                        <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                class="w-5 h-5 text-red-500">
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button>
-
-                        <!-- Add To Cart (Hidden → Hover Show) -->
-                        <div
-                            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart(1, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                                Add To Cart
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Content -->
-                    <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">
-                            Womens Denim Jacket
-                        </h3>
-
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>Brand Name</span>
-                            <span class="flex items-center gap-1 text-gray-700">
-                                <span class="text-sm font-medium">4.4</span>
-                            </span>
-                        </div>
-
-                        <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                            <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                        </div>
-                        <div class="lgg:hidden block">
-                            <button class=" px-4 py-1 bg-white border-secondary border-[1px] rounded-md  w-full">Add</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="item flex justify-center items-center">
-                <div
-                    class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                    <!-- Image Wrapper -->
-                    <div class="relative rounded-xl overflow-hidden">
-                        <img
-                            src="./assets/images/Home-image/pic-7.avif"
-                            alt="Silver Lehenga"
-                            class="w-full h-[340px] object-cover object-top object-center" />
-
-                        <!-- Badges -->
-                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                            <span
-                                class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                                Trending
-                            </span>
-                            <span
-                                class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                -17%
-                            </span>
-                        </div>
-
-                        <!-- Wishlist Heart Icon (Top Right) -->
-                        <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                class="w-5 h-5 text-red-500">
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button>
-
-                        <!-- Add To Cart (Hidden → Hover Show) -->
-                        <div
-                            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart(1, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                                Add To Cart
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Content -->
-                    <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">
-                            Womens Denim Jacket
-                        </h3>
-
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>Brand Name</span>
-                            <span class="flex items-center gap-1 text-gray-700">
-                                <span class="text-sm font-medium">4.4</span>
-                            </span>
-                        </div>
-
-                        <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                            <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                        </div>
-                        <div class="lgg:hidden block">
-                            <button class=" px-4 py-1 bg-white border-secondary border-[1px] rounded-md  w-full">Add</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        @endforeach  
 
             <!-- Add more product items as needed -->
         </div>
@@ -1053,292 +862,89 @@
         </div>
 
         <div class="main-owl owl-carousel owl-theme">
-            <div class="item flex justify-center items-center">
-                <div
-                    class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                   
-                    <div class="relative rounded-xl overflow-hidden">
-                        <img
-                            src="./assets/images/Home-image/pic-18.avif"
-                            alt="Silver Lehenga"
-                            class="w-full h-[340px] object-cover object-top object-center" />
+            @foreach($categories as $category)
+                <div class="item flex justify-center items-center">
+                    <div
+                        class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer category-card" data-category-id="{{ $category->id }}">
+                        <!-- Image Wrapper -->
+                        <div class="relative rounded-xl overflow-hidden">
+                            <img
+                                src="{{ $category->image ? asset('uploads/categories/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                                alt="{{ $category->name }}"
+                                class="w-full h-[340px] object-cover object-top object-center" />
 
-                        <!-- Badges -->
-                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                            <span
-                                class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                                Trending
-                            </span>
-                            <span
-                                class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                -17%
-                            </span>
-                        </div>
+                            <!-- Category Badge -->
+                            <div class="absolute top-3 left-3 flex flex-col gap-2">
+                                @if($category->products_count ?? false)
+                                    <span
+                                        class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
+                                        {{ $category->products_count }} Products
+                                    </span>
+                                @endif
+                                @if($category->is_active)
+                                    <span
+                                        class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                                        Active
+                                    </span>
+                                @endif
+                            </div>
 
-                        <!-- Wishlist Heart Icon (Top Right) -->
-                        <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                class="w-5 h-5 text-red-500">
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button>
-
-                        <!-- Add To Cart (Hidden → Hover Show) -->
-                        <div
-                            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart(1, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                                Add To Cart
+                            <!-- View Products Button (Top Right) -->
+                            <button
+                                class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    class="w-5 h-5 text-blue-500">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
                             </button>
-                        </div>
-                    </div>
 
-                    <!-- Content -->
-                    <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">
-                            Womens Denim Jacket
-                        </h3>
-
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>Brand Name</span>
-                            <span class="flex items-center gap-1 text-gray-700">
-                                <span class="text-sm font-medium">4.4</span>
-                            </span>
+                            <!-- View Category (Hidden → Hover Show) -->
+                            <div
+                                class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
+                                <a href="{{ route('category.show', $category->slug) }}" class="block bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors text-center">
+                                    View Category
+                                </a>
+                            </div>
                         </div>
 
-                        <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                            <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                        </div>
-                        <div class="lgg:hidden block">
-                            <button class=" px-4 py-1 bg-white border-secondary border-[1px] rounded-md  w-full">Add</button>
+                        <!-- Content -->
+                        <div class="p-4 space-y-1">
+                            <h3 class="text-[15px] font-semibold text-gray-900">
+                                {{ $category->name }}
+                            </h3>
+
+                            <div class="flex items-center gap-2 text-sm text-gray-600">
+                                <span>{{ $category->description ? Str::limit($category->description, 50) : 'Browse our collection' }}</span>
+                            </div>
+
+                            <div class="flex items-center gap-2 mt-2 flex-wrap">
+                                @if($category->products_count)
+                                    <span class="text-lg font-bold text-gray-900">{{ $category->products_count }} Items</span>
+                                @else
+                                    <span class="text-lg font-bold text-gray-900">Browse Collection</span>
+                                @endif
+                            </div>
+                            <div class="lgg:hidden block">
+                                <a href="{{ route('category.show', $category->slug) }}" class="block px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full text-center">
+                                    View
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="item flex justify-center items-center">
-                <div
-                    class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                    <!-- Image Wrapper -->
-                    <div class="relative rounded-xl overflow-hidden">
-                        <img
-                            src="./assets/images/Home-image/pic-19.avif"
-                            alt="Silver Lehenga"
-                            class="w-full h-[340px] object-cover object-top object-center" />
-
-                        <!-- Badges -->
-                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                            <span
-                                class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                                Trending
-                            </span>
-                            <span
-                                class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                -17%
-                            </span>
-                        </div>
-
-                        <!-- Wishlist Heart Icon (Top Right) -->
-                        <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                class="w-5 h-5 text-red-500">
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button>
-
-                        <!-- Add To Cart (Hidden → Hover Show) -->
-                        <div
-                            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart(1, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                                Add To Cart
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Content -->
-                    <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">
-                            Womens Denim Jacket
-                        </h3>
-
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>Brand Name</span>
-                            <span class="flex items-center gap-1 text-gray-700">
-                                <span class="text-sm font-medium">4.4</span>
-                            </span>
-                        </div>
-
-                        <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                            <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                        </div>
-                        <div class="lgg:hidden block">
-                            <button class=" px-4 py-1 bg-white border-secondary border-[1px] rounded-md  w-full">Add</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="item flex justify-center items-center">
-                <div
-                    class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                    <!-- Image Wrapper -->
-                    <div class="relative rounded-xl overflow-hidden">
-                        <img
-                            src="./assets/images/Home-image/pic-20.avif"
-                            alt="Silver Lehenga"
-                            class="w-full h-[340px] object-cover object-top object-center" />
-
-                        <!-- Badges -->
-                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                            <span
-                                class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                                Trending
-                            </span>
-                            <span
-                                class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                -17%
-                            </span>
-                        </div>
-
-                        <!-- Wishlist Heart Icon (Top Right) -->
-                        <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                class="w-5 h-5 text-red-500">
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button>
-
-                        <!-- Add To Cart (Hidden → Hover Show) -->
-                        <div
-                            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart(1, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                                Add To Cart
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Content -->
-                    <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">
-                            Womens Denim Jacket
-                        </h3>
-
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>Brand Name</span>
-                            <span class="flex items-center gap-1 text-gray-700">
-                                <span class="text-sm font-medium">4.4</span>
-                            </span>
-                        </div>
-
-                        <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                            <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                        </div>
-                        <div class="lgg:hidden block">
-                            <button class=" px-4 py-1 bg-white border-secondary border-[1px] rounded-md  w-full">Add</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="item flex justify-center items-center">
-                <div
-                    class="group w-full bg-white xxs:max-w-full max-w-[300px]  rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                    <!-- Image Wrapper -->
-                    <div class="relative rounded-xl overflow-hidden">
-                        <img
-                            src="./assets/images/Home-image/pic-21.avif"
-                            alt="Silver Lehenga"
-                            class="w-full h-[340px] object-cover object-top object-center" />
-
-                        <!-- Badges -->
-                        <div class="absolute top-3 left-3 flex flex-col gap-2">
-                            <span
-                                class="bg-primary text-white text-xs font-semibold px-2 py-1 rounded">
-                                Trending
-                            </span>
-                            <span
-                                class="bg-primary w-fit text-white text-xs font-semibold px-2 py-1 rounded">
-                                -17%
-                            </span>
-                        </div>
-
-                        <!-- Wishlist Heart Icon (Top Right) -->
-                        <button
-                            class="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-all hover:scale-110">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                class="w-5 h-5 text-red-500">
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button>
-
-                        <!-- Add To Cart (Hidden → Hover Show) -->
-                        <div
-                            class="lgg:block hidden absolute bottom-0 w-full px-3 py-4 bg-white/45 backdrop-blur-[2px] opacity-100 translate-y-0 lg:opacity-0 lg:translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300 ease-out">
-                            <button onclick="addToCart(1, event)" class="bg-white border w-full border-secondary text-black text-xs sm:text-sm font-medium px-4 py-2 rounded-lg hover:bg-secondary-light transition-colors">
-                                Add To Cart
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Content -->
-                    <div class="p-4 space-y-1">
-                        <h3 class="text-[15px] font-semibold text-gray-900">
-                            Womens Denim Jacket
-                        </h3>
-
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span>Brand Name</span>
-                            <span class="flex items-center gap-1 text-gray-700">
-                                <span class="text-sm font-medium">4.4</span>
-                            </span>
-                        </div>
-
-                        <div class="flex items-center gap-2 mt-2 flex-wrap">
-                            <span class="text-lg font-bold text-gray-900">Rs. 700</span>
-                            <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
-                        </div>
-                        <div class="lgg:hidden block">
-                            <button class=" px-4 py-1 bg-white border-secondary border-[1px] rounded-md  w-full">Add</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Add more product items as needed -->
+            @endforeach
         </div>
     </div>
 </section>
@@ -1358,17 +964,17 @@
                 <div
                     class="relative bg-[#b8a89a] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]">
                     <img
-                        src="./assets/images/Home-image/pic-8.avif"
+                        src="{{asset('web/images/banner-images/red-plazo-6.webp')}}"
                         alt="Traditional Blouse"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div
                         class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
-                        <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
                             Trendy To<br />Traditional Blouses
                         </h2>
                         <p class="text-sm text-black mb-6">
                             Get <span class="font-semibold">7% OFF</span> | Use Code:
-                            <span class="text-[#c28b54] font-medium">GLAM7</span>
+                            <span class="text-white font-medium">GLAM7</span>
                         </p>
                         <button
                             class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">
@@ -1381,17 +987,17 @@
                 <div
                     class="relative bg-[#e8dcd6] overflow-hidden max-h-[600px] min-h-[500px] h-[50vh]">
                     <img
-                        src="./assets/images/Home-image/pic-9.avif"
+                        src="{{asset('web/images/banner-images/gray-lahenga-2.webp')}}"
                         alt="Jewellery Edit"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div
                         class="relative z-10 flex flex-col justify-center h-full p-10">
-                        <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
                             Jewellery Edit
                         </h2>
                         <p class="text-sm text-black mb-6">
                             Get <span class="font-semibold">7% OFF</span> | Use Code:
-                            <span class="text-[#c28b54] font-medium">GLAM7</span>
+                            <span class="text-white font-medium">GLAM7</span>
                         </p>
                         <button
                             class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">
@@ -1407,17 +1013,17 @@
                 <!-- Left Banner -->
                 <div class="relative bg-[#b8a89a] overflow-hidden">
                     <img
-                        src="./assets/images/Home-image/pic-10.avif"
+                        src="{{asset('web/images/banner-images/red-plazo-6.webp')}}"
                         alt="Traditional Blouse"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div
                         class="relative z-10 flex flex-col justify-center h-full p-10 bg-black/10">
-                        <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
                             Trendy To<br />Traditional Blouses
                         </h2>
                         <p class="text-sm text-black mb-6">
                             Get <span class="font-semibold">7% OFF</span> | Use Code:
-                            <span class="text-[#c28b54] font-medium">GLAM7</span>
+                            <span class="text-white font-medium">GLAM7</span>
                         </p>
                         <button
                             class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">
@@ -1429,17 +1035,17 @@
                 <!-- Right Banner -->
                 <div class="relative bg-[#e8dcd6] overflow-hidden">
                     <img
-                        src="./assets/images/Home-image/pic-11.avif"
+                       src="{{asset('web/images/banner-images/gray-lahenga-2.webp')}}"
                         alt="Jewellery Edit"
                         class="absolute inset-0 w-full h-full object-cover object-center object-top" />
                     <div
                         class="relative z-10 flex flex-col justify-center h-full p-10">
-                        <h2 class="heading-font text-4xl md:text-5xl text-black mb-4">
+                        <h2 class="heading-font text-4xl md:text-5xl text-white mb-4">
                             Jewellery Edit
                         </h2>
                         <p class="text-sm text-black mb-6">
                             Get <span class="font-semibold">7% OFF</span> | Use Code:
-                            <span class="text-[#c28b54] font-medium">GLAM7</span>
+                            <span class="text-white font-medium">GLAM7</span>
                         </p>
                         <button
                             class="w-fit bg-black text-white px-6 py-2 text-sm tracking-wide hover:bg-gray-800 transition">
@@ -1528,7 +1134,7 @@
                             <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
                         </div>
                         <div class="lgg:hidden block">
-                            <button class=" px-4 py-1 bg-white border-secondary border-[1px] rounded-md  w-full">Add</button>
+                            <button onclick="addToCart(1, event)" class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
                         </div>
                     </div>
                 </div>
@@ -1599,7 +1205,7 @@
                             <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
                         </div>
                         <div class="lgg:hidden block">
-                            <button class=" px-4 py-1 bg-white border-secondary border-[1px] rounded-md  w-full">Add</button>
+                            <button onclick="addToCart(1, event)" class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
                         </div>
                     </div>
                 </div>
@@ -1670,7 +1276,7 @@
                             <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
                         </div>
                         <div class="lgg:hidden block">
-                            <button class=" px-4 py-1 bg-white border-secondary border-[1px] rounded-md  w-full">Add</button>
+                            <button onclick="addToCart(1, event)" class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
                         </div>
                     </div>
                 </div>
@@ -1741,7 +1347,7 @@
                             <span class="text-sm text-gray-400 line-through">Rs. 1000</span>
                         </div>
                         <div class="lgg:hidden block">
-                            <button class=" px-4 py-1 bg-white border-secondary border-[1px] rounded-md  w-full">Add</button>
+                            <button onclick="addToCart(1, event)" class="px-4 py-1 bg-white border-secondary border-[1px] rounded-md w-full">Add</button>
                         </div>
                     </div>
                 </div>
