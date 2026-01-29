@@ -79,7 +79,7 @@
             <div
                 class="group flex justify-between items-center lgg:gap-3 gap-[3px] border border-gray-200 rounded-full px-3 py-2 transition-all duration-300 ease-out hover:bg-secondary-light hover:border-pink-300 hover:shadow-md hover:-translate-y-0.5">
                 <img
-                    src="./assets/images/Home-image/pic-5.avif"
+                    src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
                     class="min-w-12 min-h-2 w-12 h-12 rounded-full object-cover transition-transform duration-300 group-hover:scale-110" />
 
                 <span
@@ -856,7 +856,7 @@
                         <!-- Image Wrapper -->
                         <div class="relative rounded-xl overflow-hidden">
                             <img
-                                src="{{ $category->image ? asset('uploads/categories/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
+                                src="{{ $category->image ? asset('uploads/category/' . $category->image) : asset('assets/images/placeholder-category.jpg') }}"
                                 alt="{{ $category->name }}"
                                 class="w-full h-[340px] object-cover object-top object-center" />
 
