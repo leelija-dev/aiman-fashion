@@ -129,7 +129,7 @@
                             <!-- Image Wrapper -->
                             <div class="relative rounded-xl overflow-hidden">
                                 <img
-                                    src="{{ $product->product_image ? asset('uploads/products/' . $product->product_image) : asset('assets/images/placeholder.jpg') }}"
+                                    src="{{ $product->product_image ? asset($product->product_image) : asset('assets/images/placeholder.jpg') }}"
                                     alt="{{ $product->name }}"
                                     class="w-full h-[340px] object-cover object-top object-center" />
 
@@ -700,14 +700,14 @@
 
         <div class="main-owl owl-carousel owl-theme">
 
-        @foreach($products as $product):
+        @foreach($products as $product)
             <div class="item flex justify-center items-center">
                 <div
                     class="group w-full bg-white xxs:max-w-full max-w-[300px] rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer product-card" data-product-id="{{ $product->id }}">
                     <!-- Image Wrapper -->
                     <div class="relative rounded-xl overflow-hidden">
                         <img
-                            src="{{ $product->product_image ? asset('uploads/products/' . $product->product_image) : asset('assets/images/placeholder.jpg') }}"
+                            src="{{ $product->product_image ? asset($product->product_image) : asset('assets/images/placeholder.jpg') }}"
                             alt="{{ $product->name }}"
                             class="w-full h-[340px] object-cover object-top object-center" />
 

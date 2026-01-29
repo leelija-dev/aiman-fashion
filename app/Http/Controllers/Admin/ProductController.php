@@ -58,23 +58,53 @@ class ProductController extends Controller
         $product = Product::create($data);
 
         // Handle image upload if present
+        // if ($request->hasFile('image')) {
+        //     $image = $request->file('image');
+        //     $filename = time() . '_' . $image->getClientOriginalName();
+            
+        //     // Create upload directory if it doesn't exist
+        //     $uploadPath = public_path('uploads/products');
+        //     if (!file_exists($uploadPath)) {
+        //         mkdir($uploadPath, 0777, true);
+        //     }
+            
+        //     $image->move($uploadPath, $filename);
+            
+        //     ProductImage::create([
+        //         'product_id' => $product->id,
+        //         'image' => $filename,
+        //     ]);
+        // }
+
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $filename = time() . '_' . $image->getClientOriginalName();
-            
-            // Create upload directory if it doesn't exist
-            $uploadPath = public_path('uploads/products');
-            if (!file_exists($uploadPath)) {
-                mkdir($uploadPath, 0777, true);
-            }
-            
-            $image->move($uploadPath, $filename);
-            
-            ProductImage::create([
-                'product_id' => $product->id,
-                'image' => $filename,
-            ]);
-        }
+    $image = $request->file('image');
+
+    $filename = time() . '_' . $image->getClientOriginalName();
+
+    // Folder inside public
+    $folder = 'uploads/products';
+
+    // Absolute path for moving file
+    $uploadPath = public_path($folder);
+
+    // Create directory if not exists
+    if (!file_exists($uploadPath)) {
+        mkdir($uploadPath, 0777, true);
+    }
+
+    // Move file
+    $image->move($uploadPath, $filename);
+
+    // Path to store in DB (relative path)
+    $imagePath = $folder . '/' . $filename;
+
+    ProductImage::create([
+        'product_id' => $product->id,
+        // 'image'      => $filename,     // optional
+        'image' => $imagePath,    // save full path
+    ]);
+}
+
 
         return redirect()->route('admin.products')->with('success', 'Product created successfully!');
 
@@ -99,33 +129,73 @@ class ProductController extends Controller
         $product->update($data);
 
         // Handle image upload if present
-        if ($request->hasFile('image')) {
-            // Delete existing images
-            $existingImages = ProductImage::where('product_id', $id)->get();
-            foreach ($existingImages as $existingImage) {
-                $imagePath = public_path('uploads/products/' . $existingImage->image);
-                if (file_exists($imagePath)) {
-                    unlink($imagePath);
-                }
-                $existingImage->delete();
-            }
+        // if ($request->hasFile('image')) {
+        //     // Delete existing images
+        //     $existingImages = ProductImage::where('product_id', $id)->get();
+        //     foreach ($existingImages as $existingImage) {
+        //         $imagePath = public_path('uploads/products/' . $existingImage->image);
+        //         if (file_exists($imagePath)) {
+        //             unlink($imagePath);
+        //         }
+        //         $existingImage->delete();
+        //     }
 
-            // Upload new image
-            $image = $request->file('image');
-            $filename = time() . '_' . $image->getClientOriginalName();
+        //     // Upload new image
+        //     $image = $request->file('image');
+        //     $filename = time() . '_' . $image->getClientOriginalName();
             
-            $uploadPath = public_path('uploads/products');
-            if (!file_exists($uploadPath)) {
-                mkdir($uploadPath, 0777, true);
+        //     $uploadPath = public_path('uploads/products');
+        //     if (!file_exists($uploadPath)) {
+        //         mkdir($uploadPath, 0777, true);
+        //     }
+            
+        //     $image->move($uploadPath, $filename);
+            
+        //     ProductImage::create([
+        //         'product_id' => $product->id,
+        //         'image' => $filename,
+        //     ]);
+        // }
+
+        if ($request->hasFile('image')) {
+
+    $folder = 'uploads/products';
+    $uploadPath = public_path($folder);
+
+    // 1️⃣ Delete existing images from DB + storage
+    $existingImages = ProductImage::where('product_id', $id)->get();
+
+    foreach ($existingImages as $existingImage) {
+        if (!empty($existingImage->image_path)) {
+            $fullPath = public_path($existingImage->image_path);
+            if (file_exists($fullPath)) {
+                unlink($fullPath);
             }
-            
-            $image->move($uploadPath, $filename);
-            
-            ProductImage::create([
-                'product_id' => $product->id,
-                'image' => $filename,
-            ]);
         }
+        $existingImage->delete();
+    }
+
+    // 2️⃣ Upload new image
+    $image = $request->file('image');
+    $filename = time() . '_' . $image->getClientOriginalName();
+
+    // Create directory if not exists
+    if (!file_exists($uploadPath)) {
+        mkdir($uploadPath, 0777, true);
+    }
+
+    $image->move($uploadPath, $filename);
+
+    // 3️⃣ Save relative path in DB
+    $imagePath = $folder . '/' . $filename;
+
+    ProductImage::create([
+        'product_id' => $product->id,
+        // 'image'      => $filename,     // optional
+        'image' => $imagePath,    // important
+    ]);
+}
+
 
         return redirect()->route('admin.products')->with('success', 'Product updated successfully!');
     }

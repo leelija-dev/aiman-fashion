@@ -104,13 +104,14 @@ class ProductVariantController extends Controller
             foreach ($request->file('images') as $image) {
 
                 $filename = time().rand(100,999).'.'.$image->getClientOriginalExtension();
-
+                $folder = 'uploads/variants';
                 $image->move(public_path('uploads/variants'), $filename);
+                $imagePath = $folder . '/' . $filename;
                 // dd($variant->id);
                 ProductImage::create([
                     'product_id' => $variant->product_id,
                     'variant_id' => $variant->id,
-                    'image' => $filename
+                    'image' => $imagePath //$filename
                 ]);
             }
             }
@@ -200,15 +201,15 @@ class ProductVariantController extends Controller
     if ($request->hasFile('images')) {
 
        foreach ($request->file('images') as $image) {
-
+$folder = 'uploads/variants';
         $filename = time().rand(100,999).'.'.$image->getClientOriginalExtension();
-
+$imagePath = $folder . '/' . $filename;
             $image->move(public_path('uploads/variants'), $filename);
 
             ProductImage::create([
                 'product_id' => $request->product_id,
                 'variant_id' => $productVariant->id,
-                'image' => $filename
+                'image' => $imagePath //$filename
             ]);
         }
     }
