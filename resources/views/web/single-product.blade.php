@@ -19,10 +19,10 @@
           @forelse($product->images as $index => $image)
             <div
               class="thumbnail w-20 lg:h-[25%] h-full min-w-20 overflow-hidden rounded-lg border-2 border-transparent cursor-pointer {{ $index == 0 ? 'selected' : '' }}"
-              data-display="{{ asset('uploads/products/' . $image->image) }}"
-              data-large="{{ asset('uploads/products/' . $image->image) }}">
+              data-display="{{ asset($image->image) }}"
+              data-large="{{ asset($image->image) }}">
               <img
-                src="{{ asset('uploads/products/' . $image->image) }}"
+                src="{{ asset($image->image) }}"
                 class="w-full h-full object-cover object-center object-top"
                 alt="{{ $product->name }}" />
             </div>
@@ -43,7 +43,7 @@
         <div
           class="zoom-container w-full relative group order-1 lg:order-2 h-full">
           <img
-            src="{{ $product->images->first() ? asset('uploads/products/' . $product->images->first()->image) : asset('assets/images/placeholder.jpg') }}"
+            src="{{ $product->images->first() ? asset($product->images->first()->image) : asset('assets/images/placeholder.jpg') }}"
             class="w-full h-full object-cover object-center object-top"
             alt="{{ $product->name ?? 'Product' }}"
             id="main-image" />

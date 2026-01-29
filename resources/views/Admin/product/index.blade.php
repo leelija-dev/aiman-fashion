@@ -53,7 +53,7 @@
                                     <div class="d-flex px-2 py-1">
                                         <div>
                                             @if($product->images->count() > 0)
-                                                <img src="{{ asset('uploads/products/' . $product->images->first()->image) }}" 
+                                                <img src="{{ asset($product->images->first()->image) }}" 
                                                      class="avatar avatar-sm me-3" alt="{{ $product->name }}">
                                             @else
                                                 <img src="{{ asset('assets/img/placeholder.png') }}" 
